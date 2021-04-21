@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.QnasDAO">
+	<select id="selectQnasList" resultType="qnas">
+		select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from qnas
+		order by qna_id desc
+	</select>
+	<insert id="insertQnas" parameterType="qnas">
+		<selectKey keyProperty="qna_id" resultType="long" order="BEFORE">
+			select seq_qnas_qna_id.nextval from dual
+		</selectKey>
+		insert into qnas
+		(qna_id, qna_category, qna_title, qna_content, qna_answer, member_id)
+		values
+		(#{qna_id}, #{qna_category}, #{qna_title}, #{qna_content}, #{qna_answer}, #{member_id})
+	</insert>
+	<select id="selectByQnaId" parameterType="long" resultType="qnas">
+		select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from qnas
+		where qna_id=#{qna_id}
+	</select>
+	<update id="updateQnas" parameterType="qnas">
+		update qnas set
+			qna_category=#{qna_category},
+			qna_title=#{qna_title},
+			qna_content=#{qna_content},
+			qna_answer=#{qna_answer}
+		where qna_id=#{qna_id}
+	</update>
+	<delete id="deleteByQnaId" parameterType="long">
+		delete from qnas
+		where qna_id=#{qna_id}
+	</delete>
+	
+	<select id="count" resultType="int">
+		select count(*) from qnas
+	</select>
+	
+	<select id="selectByPage" parameterType="pager" resultType="qnas">
+		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from (
+		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    from (
+		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		        from qnas
+		        order by qna_id desc
+		    )
+		    where rownum &lt;= #{endRowNo}
+		)
+		where rnum &gt;= #{startRowNo}
+	</select>
+	
+	<select id="selectByPageAndId" resultType="qnas">
+		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from (
+		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    from (
+		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		        from qnas
+		        where member_id  = #{member_id}
+		        order by qna_id desc
+		    )
+		    where rownum &lt;= #{endRowNo}
+		)
+		where rnum &gt;= #{startRowNo}
+	</select>
+
+	<select id="selectByPageAndCategory" resultType="qnas">
+		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from (
+		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    from (
+		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		        from qnas
+		        where qna_category  = #{qna_category}
+		        order by qna_id desc
+		    )
+		    where rownum &lt;= #{endRowNo}
+		)
+		where rnum &gt;= #{startRowNo}
+	</select>
+	
+	<select id="selectByPageAndAnswer" resultType="qnas">
+		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from (
+		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    from (
+		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		        from qnas
+		        where qna_answer  = #{qna_answer}
+		        order by qna_id desc
+		    )
+		    where rownum &lt;= #{endRowNo}
+		)
+		where rnum &gt;= #{startRowNo}
+	</select>
+	
+	
+</mapper>

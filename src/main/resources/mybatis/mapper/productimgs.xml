@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.ProductImgsDAO">
+	<select id="selectProductImgList" resultType="productImgs">
+		select product_img_id, product_img_type, product_img_category, product_img_name, product_id
+		from product_imgs
+		order by product_img_id desc
+	</select>
+	
+	<select id="selectProductImgId" resultType="productImgs" parameterType="long">
+		select product_img_id, product_img_type, product_img_category, product_img_name, product_id
+		from product_imgs
+		where product_img_id=#{product_img_id}
+	</select>
+	
+	<insert id="insertProductImg" parameterType="productImgs">
+		<selectKey keyProperty="product_img_id" resultType="long" order="BEFORE">
+			select seq_product_imgs_id.nextval from dual
+		</selectKey>
+		insert into product_imgs
+		(product_img_id, product_img_type, product_img_category, product_img_name, product_id)
+		values
+		(#{product_img_id}, #{product_img_type}, #{product_img_category}, #{product_img_name}, #{product_id})
+	</insert>
+	
+	<update id="updateProductImg" parameterType="productImgs">
+		update product_imgs set
+			product_img_type=#{product_img_type},
+			product_img_category=#{product_img_category},
+			product_img_name=#{product_img_name},
+		where product_img_id=#{product_img_id}
+	</update>
+	
+	<delete id="deleteByProductImgId" parameterType="long">
+		delete from product_imgs where product_img_id=#{product_img_id}
+	</delete>
+
+	<select id="selectCarouselImgsByProductId" resultType="productImgsCarousel" parameterType="long">
+		select product_img_id, product_img_category, product_img_name, product_id
+		from product_imgs
+		where product_id=#{product_id} and product_img_category='carousel'
+	</select>
+	<select id="selectDetailImgsByProductId" resultType="productImgsDetail" parameterType="long">
+		select product_img_id, product_img_category, product_img_name, product_id
+		from product_imgs
+		where product_id=#{product_id} and product_img_category='detail'
+	</select>
+</mapper>

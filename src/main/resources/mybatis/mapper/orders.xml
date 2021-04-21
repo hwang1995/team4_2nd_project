@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.OrdersDAO">
+<select id="selectOrdersList" resultType="orders">
+	select orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id
+	from orders
+	order by order_id desc
+</select>
+<select id="selectByOrderId" parameterType="long" resultType="orders">
+	select order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	from orders
+	where order_id=#{order_id}
+</select>
+
+<insert id="insertOrders" parameterType="orders">
+	<selectKey keyProperty="order_id" resultType="long" order="BEFORE">
+		select seq_orders_orderid.nextval from dual
+	</selectKey>
+	insert into orders
+		(order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id)
+		values
+		(#{order_id}, sysdate, #{order_bank}, 
+		#{order_delivery_charge}, #{order_payment_status},
+		#{order_delivery_status}, #{recipient_name},
+		#{recipient_address}, #{recipient_tel} ,#{member_id})
+</insert>
+
+<update id="updateOrders" parameterType="orders">
+	update orders set
+		order_date = #{order_date},
+		order_bank = #{order_bank},
+		order_delivery_charge = #{order_delivery_charge},
+		order_payment_status = #{order_payment_status},
+		order_delivery_status = #{order_delivery_status},
+		recipient_flag = #{recipient_flag},
+		recipient_name = #{recipient_name},
+		recipient_address = #{recipient_address}
+	where order_id=#{order_id}
+</update>
+<delete id="deleteByOrderId" parameterType="long">
+	delete from orders where order_id=#{order_id}
+</delete>
+<select id="selectByMemberId" parameterType="long" resultType="orders">
+	select order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	from orders
+	where member_id=#{member_id}
+	order by order_id desc
+</select>
+<select id="countOrders" parameterType="long" resultType="int">
+	select count(*) from orders where member_id=#{member_id}
+</select>
+<select id="selectByPage" parameterType="pager" resultType="orders">
+	select rnum, order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	from (
+	    select rownum as rnum, order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	    from (
+	        select order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	        from orders
+	        where member_id=#{member_id}
+	        order by order_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+<select id="selectAllByPage" parameterType="pager" resultType="orders">
+	select rnum, order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	from (
+	    select rownum as rnum, order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	    from (
+	        select order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	        from orders
+	        order by order_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+
+<select id="selectByPageAndOrderId" resultType="orders">
+	select rnum, order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	from (
+	    select rownum as rnum, order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	    from (
+	        select order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	        from orders
+      	    where order_id=#{order_id}
+	        order by order_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+<select id="selectByPageAndDelivery" resultType="orders">
+	select rnum, order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	from (
+	    select rownum as rnum, order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
+	    from (
+	        select order_id, order_date, order_bank,
+			 order_delivery_charge, order_payment_status, 
+			 order_delivery_status, recipient_name, 
+			 recipient_address, recipient_tel , member_id
+	        from orders
+      	    where order_delivery_status=#{order_delivery_status}
+	        order by order_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+<select id="count" resultType="int">
+	select count(*) from orders
+</select>
+
+</mapper>

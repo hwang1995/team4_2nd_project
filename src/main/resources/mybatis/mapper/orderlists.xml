@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.OrderlistsDAO">
+	<select id="selectOrderlistsList" resultType="orderlists">
+		select orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id
+		from orderlists
+		order by orderlist_id desc
+	</select>
+	
+	<insert id="insertOrderlists" parameterType="orderlists">
+		<selectKey keyProperty="orderlist_id" resultType="long" order="BEFORE">
+			select seq_orderlists_orderlist_id.nextval from dual
+		</selectKey>
+		insert into orderlists
+		(orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id)
+		values
+		(#{orderlist_id}, #{orderlist_quantity}, #{product_color},
+		 #{product_size}, #{order_id}, #{product_id})
+	</insert>
+	
+	<select id="selectByOrderlistId" parameterType="long" resultType="orderlists">
+		select orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id
+		from orderlists
+		where orderlist_id=#{orderlist_id}
+	</select>
+	<update id="updateOrderlists" parameterType="orderlists">
+		update orderlists set
+			orderlist_quantity=#{orderlist_quantity},
+			product_color=#{product_color},
+			product_size=#{product_size}
+		where orderlist_id=#{orderlist_id}
+	</update>
+	<delete id="deleteByOrderlistId" parameterType="long">
+		delete from orderlists
+		where orderlist_id=#{orderlist_id}
+	</delete>
+	<select id="selectByOrderId" parameterType="long" resultType="orderlists">
+		select orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id
+		from orderlists
+		where order_id=#{order_id}
+	</select>
+</mapper>

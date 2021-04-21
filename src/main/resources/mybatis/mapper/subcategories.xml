@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.SubCategoriesDAO">
+
+	<select id="selectSubCategoriesList"
+			resultType="subcategories">
+		select subcategory_id, subcategory_name, category_id
+		from subcategories
+		order by subcategory_id asc
+	</select>
+	
+	<select id="selectBySubCategoryId"
+			parameterType="long"
+			resultType="subcategories">
+		select *
+		from subcategories
+		where
+		subcategory_id = #{subcategory_id}
+	</select>
+	
+	<insert id="insertSubCategories"
+			parameterType="subcategories">
+		insert into subcategories
+		(subcategory_id, subcategory_name, category_id)
+		values
+		(#{subcategory_id}, #{subcategory_name}, #{category_id})
+	</insert>
+	
+	<update id="updateSubCategories"
+			parameterType="subcategories">
+		update subcategories
+		set
+		subcategory_name = #{subcategory_name}
+		where
+		subcategory_id = #{subcategory_id}
+	</update>
+	
+	<delete id="deleteBySubCategoriesId"
+			parameterType="long">
+		delete from subcategories
+		where
+		subcategory_id = #{subcategory_id}
+		
+	</delete>
+	<select id="selectBySubCategoryName"
+			parameterType="string"
+			resultType="subcategories">
+		select subcategory_id, subcategory_name, category_id
+		from subcategories
+		where
+		subcategory_name = #{subcategory_name}
+	</select>
+
+
+</mapper>

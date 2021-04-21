@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.MembersDAO">
+	<select id="selectMembersList" resultType="members">
+		select member_id, member_email, member_name, member_pw, member_tel, member_address, member_authority, member_enabled
+		from members
+		order by member_id desc
+	</select>
+	<insert id="insertMembers" parameterType="members">
+		<selectKey keyProperty="member_id" resultType="long" order="BEFORE">
+			select seq_members_memberid.nextval from dual
+		</selectKey>
+		insert into members
+		(member_id, member_email, member_name, member_pw, member_tel, member_address, member_authority, member_enabled)
+		values
+		(#{member_id}, #{member_email}, #{member_name}, #{member_pw}, #{member_tel}, #{member_address}, #{member_authority}, #{member_enabled})
+	</insert>
+	<select id="selectByMemberId" parameterType="long" resultType="members">
+		select member_id, member_email, member_name, member_pw, member_tel, member_address, member_authority, member_enabled
+		from members
+		where member_id=#{member_id}
+	</select>
+	<update id="updateMembers" parameterType="members">
+		update members set
+			member_pw=#{member_pw},
+			member_tel=#{member_tel},
+			member_address=#{member_address}
+		where member_email=#{member_email}
+	</update>
+	<delete id="deleteByMemberId" parameterType="long">
+		delete from members
+		where member_id=#{member_id}
+	</delete>
+	
+	<select id="selectByEmailId" parameterType="string" resultType="members">
+		select member_id, member_email, member_name, member_pw, member_tel, member_address, member_authority, member_enabled
+		from members
+		where member_email=#{member_email}
+	</select>
+	
+	<select id="count" resultType="int">
+		select count(*) from members
+	</select>
+	
+	<select id="selectByPage" parameterType="pager" resultType="members">
+	select rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	from (
+	    select rownum as rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	    from (
+	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	        from members
+	        order by member_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+	
+	</select>
+	
+	<select id="selectByPageAndEmail" resultType="members">
+	select rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	from (
+	    select rownum as rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	    from (
+	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	        from members
+	        where member_email = #{member_email}
+	        order by member_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+	
+	</select>
+	
+	<select id="selectByPageAndName" resultType="members">
+	select rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	from (
+	    select rownum as rnum, member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	    from (
+	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
+	        from members
+	        where member_name = #{member_name}
+	        order by member_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+	
+	</select>
+	
+	<update id="updateMembersByAdmin" parameterType="members">
+		update members set
+			member_email=#{member_email},
+			member_name=#{member_name},
+			member_tel=#{member_tel},
+			member_address=#{member_address},
+			member_enabled=#{member_enabled}
+		where member_email=#{member_email}
+	</update>
+	
+	
+
+</mapper>

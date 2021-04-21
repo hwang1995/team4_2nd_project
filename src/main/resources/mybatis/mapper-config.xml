@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+                        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+   <typeAliases>
+   		<typeAlias type="com.team4.webapp.dto.CartsDTO" alias="carts"/>
+   		<typeAlias type="com.team4.webapp.dto.CategoriesDTO" alias="categories"/>
+   		<typeAlias type="com.team4.webapp.dto.ColorsDTO" alias="colors"/>
+   		<typeAlias type="com.team4.webapp.dto.MembersDTO" alias="members"/>
+   		<typeAlias type="com.team4.webapp.dto.OrderlistsDTO" alias="orderlists"/>
+   		<typeAlias type="com.team4.webapp.dto.OrdersDTO" alias="orders"/>
+   		<typeAlias type="com.team4.webapp.dto.ProductImgsDTO" alias="productImgs"/>
+   		<typeAlias type="com.team4.webapp.dto.ProductImgCarouselDTO" alias="productImgsCarousel"/>
+   		<typeAlias type="com.team4.webapp.dto.ProductImgDetailDTO" alias="productImgsDetail"/>
+   		<typeAlias type="com.team4.webapp.dto.ProductsDTO" alias="products"/>
+   		<typeAlias type="com.team4.webapp.dto.QnasDTO" alias="qnas"/>
+   		<typeAlias type="com.team4.webapp.dto.SizesDTO" alias="sizes"/>
+   		<typeAlias type="com.team4.webapp.dto.SubCategoriesDTO" alias="subcategories"/>
+   		<typeAlias type="com.team4.webapp.dto.Pager" alias="pager"/>
+   </typeAliases>
+</configuration>

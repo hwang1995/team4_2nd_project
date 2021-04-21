@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.ProductsDAO">
+<select id="selectProductsList" resultType="products">
+	select product_id, product_name, product_price, product_image, product_content, subcategory_id, product_subcontent
+	from products
+	order by product_id desc
+</select>
+
+<select id="selectByProductId" parameterType="long" resultType="products">
+	select product_id, product_name, product_price,product_image, product_content, subcategory_id ,product_subcontent
+	from products
+	where product_id=#{product_id}
+</select>
+
+<select id="getSequence" resultType="long">
+	select seq_products_product_id.nextval from dual
+</select>
+
+<insert id="insertProducts" parameterType="products">
+	insert into products
+	(product_id,product_name,product_price,product_image,product_content,subcategory_id,product_subcontent)
+	values
+	(#{product_id}, #{product_name}, #{product_price},#{product_image}, #{product_content}, #{subcategory_id},#{product_subcontent})
+</insert>
+<update id="updateProducts" parameterType="products">
+	update products set
+		product_name=#{product_name},
+		product_price=#{product_price},
+		product_image=#{product_image},
+		product_content=#{product_content},
+		product_subcontent=#{product_subcontent}
+		where product_id=#{product_id}
+</update>
+<delete id="deleteByProductId" parameterType="long">
+	delete from products where product_id=#{product_id}
+</delete>
+<select id="selectProdutsListOrderByHighPrice" resultType="products">
+	select product_id, product_name, product_price,product_image, product_content, subcategory_id, product_subcontent
+	from products
+	order by product_price desc
+</select>
+<select id="selectProductsListOrderByLowPrice" resultType="products">
+	select product_id, product_name, product_price, product_image,product_content, subcategory_id, product_subcontent
+	from products
+	order by product_price asc
+</select>
+<select id="selectBySubCategoryId" parameterType="long" resultType="products">
+	select product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	from products
+	where subcategory_id=#{subcategory_id}
+</select>
+<select id="selectBySubCategoryIdOrderByHighPrice" parameterType="long" resultType="products">
+	select product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	from products
+	where subcategory_id=#{subcategory_id}
+	order by product_price desc
+</select>
+<select id="selectBySubCategoryIdOrderByLowPrice" parameterType="long" resultType="products">
+	select product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	from products
+	where subcategory_id=#{subcategory_id}
+	order by product_price asc
+</select>
+
+<select id="selectByPage" parameterType="pager" resultType="products">
+	select rnum, product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	from (
+	    select rownum as rnum, product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	    from (
+	        select product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	        from products
+	        order by product_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+<select id="selectByPageAndSubCategory" resultType="products">
+	select rnum, product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	from (
+	    select rownum as rnum, product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	    from (
+	        select product_id, product_name, product_price, product_image, product_content, subcategory_id ,product_subcontent
+	        from products
+	        where subcategory_id = #{subcategory_id}
+	        order by product_id desc
+	    )
+	    where rownum &lt;= #{endRowNo}
+	)
+	where rnum &gt;= #{startRowNo}
+</select>
+
+<select id="count" resultType="int">
+	select count(*) from products
+</select>
+</mapper>

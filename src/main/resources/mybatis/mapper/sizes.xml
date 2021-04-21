@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team4.webapp.dao.SizesDAO">
+
+	<select id="selectSizesList"
+			resultType="sizes">
+		select size_id, size_name, product_id
+		from sizes
+		order by size_id asc
+	</select>
+	
+	<select id="selectBySizeId"
+			parameterType="long"
+			resultType="sizes"
+	>
+		select size_id, size_name, product_id
+		from sizes
+		where
+		size_id = #{size_id}
+	</select>
+	
+	<insert id="insertSizes"
+			parameterType="sizes">
+		<selectKey keyProperty="size_id" resultType="long" order="BEFORE">
+			select seq_sizes_size_id.nextval from dual
+		</selectKey>
+		insert into sizes
+		(size_id, size_name, product_id)
+		values
+		(#{size_id}, #{size_name}, #{product_id})
+	</insert>
+	
+	<update id="updateSizes"
+			parameterType="sizes"
+	>
+		update sizes
+		set
+		size_name = #{size_name}
+		where
+		size_id = #{size_id}
+	</update>
+	
+	<delete id="deleteBySizeId"
+			parameterType="long">
+		delete from sizes
+		where 
+		size_id = #{size_id}
+	</delete>
+	<select id="selectByProductId"
+			parameterType="long"
+			resultType="sizes"
+	>
+		select size_id, size_name, product_id
+		from sizes
+		where
+		product_id = #{product_id}
+	</select>
+
+
+</mapper>

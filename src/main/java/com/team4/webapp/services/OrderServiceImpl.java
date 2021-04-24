@@ -1,6 +1,7 @@
 package com.team4.webapp.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team4.webapp.dao.CartsDAO;
+import com.team4.webapp.dao.MembersDAO;
 import com.team4.webapp.dao.OrderlistsDAO;
 import com.team4.webapp.dao.OrdersDAO;
 import com.team4.webapp.dao.ProductsDAO;
@@ -18,6 +20,8 @@ import com.team4.webapp.dto.CartsDTO;
 import com.team4.webapp.dto.CheckoutDTO;
 import com.team4.webapp.dto.CheckoutListDTO;
 import com.team4.webapp.dto.MembersDTO;
+import com.team4.webapp.dto.MyPageDTO;
+import com.team4.webapp.dto.OrderDetailsDTO;
 import com.team4.webapp.dto.OrderlistsDTO;
 import com.team4.webapp.dto.OrdersDTO;
 import com.team4.webapp.dto.Pager;
@@ -40,6 +44,9 @@ public class OrderServiceImpl implements IOrderService{
 	
 	@Autowired
 	private CartsDAO cartsDAO;
+	
+	@Autowired
+	private MembersDAO membersDAO;
 	
 	/**
 	 * 장바구니의 목록을 가져오기 위한 서비스
@@ -217,32 +224,75 @@ public class OrderServiceImpl implements IOrderService{
 
 	@Override
 	public List<OrdersDTO> getOrdersList(Pager pager) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectAllByPage(pager);
+		return orders;
 	}
 
 	@Override
 	public List<OrdersDTO> getOrdersListByOrderId(Pager pager, Long order_id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectByPageAndOrderId(pager, order_id);
+		return orders;
 	}
 
 	@Override
 	public List<OrdersDTO> getOrdersListByDelivery(Pager pager, String delivery) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectByPageAndDelivery(pager, delivery);
+		return orders;
 	}
 
 	@Override
 	public Map<String, Object> getOrderInfo(Long order_id) {
-		// TODO Auto-generated method stub
-		return null;
+		OrdersDTO order = ordersDAO.selectByOrderId(order_id);
+		MembersDTO member = membersDAO.selectByMemberId(order.getMember_id());
+		List<OrderlistsDTO> orderLists = orderlistsDAO.selectByOrderId(order_id);
+		List<MyPageDTO> orderInfoList = new ArrayList<>();
+		//List<ProductsDTO> productLists = new ArrayList<>();
+		
+		for(OrderlistsDTO orderlist : orderLists) {
+			ProductsDTO products = productsDAO.selectByProductId(orderlist.getProduct_id());
+			MyPageDTO orderInfo = new MyPageDTO();
+			orderInfo.setOrderInfo(orderlist);
+			orderInfo.setProductsInfo(products);
+			orderInfoList.add(orderInfo);
+		}
+		
+		long totalPrice = 0;
+		for(MyPageDTO list : orderInfoList) {
+			long tempPrice = (long) list.getProduct_quantity() * (long) list.getProduct_price();
+			totalPrice += tempPrice;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("order", order);
+		map.put("member", member);
+		map.put("orderInfoList", orderInfoList);
+		map.put("totalPrice", totalPrice);
+		//map.put("orderLists", orderLists);
+		//map.put("productsList", productLists);
+		
+		return map;
 	}
 
 	@Override
 	public OrdersDTO modifyOrder(OrdersDTO orderInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		OrdersDTO order = new OrdersDTO();
+		int row = ordersDAO.updateOrders(orderInfo);
+		if(row == 1) {
+			order = ordersDAO.selectByOrderId(orderInfo.getOrder_id());
+		} else {
+			logger.info("수정실패");
+		}
+		return order;
+	}
+
+	@Override
+	public int getTotalOrdersCount() {
+		return ordersDAO.count();
+	}
+
+	@Override
+	public int getByDeliveryOrdersCount(String order_delivery_status) {
+		return ordersDAO.countByDelivery(order_delivery_status);
 	}
 	
 	

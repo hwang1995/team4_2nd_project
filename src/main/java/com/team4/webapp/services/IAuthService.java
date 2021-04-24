@@ -48,6 +48,13 @@ public interface IAuthService {
 	 */
 	List<MembersDTO> showMemberList();
 	
+	/**
+	 * 관리자가 회원가입을 하기 위한 인터페이스
+	 * @param MembersDTO member
+	 * @return int (영향을 받은 행의 수를 얻기 위하여)
+	 */
+	int registAdminMember(MembersDTO member);
+	
 	
 
 }

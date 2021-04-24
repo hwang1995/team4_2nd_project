@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team4.webapp.dto.MembersDTO;
 import com.team4.webapp.security.JwtUtil;
+import com.team4.webapp.services.AuthServiceImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -24,6 +25,8 @@ public class AuthController {
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthServiceImpl authServiceImpl;
 	
 	@PostMapping("/login")
 	public Map<String, String> login(@RequestBody Map<String, String> userInfo){
@@ -51,7 +54,26 @@ public class AuthController {
 	
 	@PostMapping("/register")
 	public void register(@RequestBody MembersDTO memberInfo) {
-		
+		int row = authServiceImpl.registAdminMember(memberInfo);
+		if(row != 0) {
+			logger.info("회원가입 성공");
+		}else {
+			logger.info("회원가입 실패");
+		}
 	}
-
+	/**
+	 * 회원가입시에 존재하는 이메일인지 확인하기 위해 사용하는 컨트롤러
+	 * @param MembersDTO member
+	 * @return String
+	 */
+	@PostMapping("/existed-email")
+	public boolean isExistedEmail(@RequestBody MembersDTO member) {
+		String email = member.getMember_email();
+		if(email !="") {
+			boolean result = authServiceImpl.isExistedEmail(email);
+			return result;
+		}else {
+			return false;
+		}
+	}
 }

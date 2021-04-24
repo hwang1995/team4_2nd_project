@@ -120,6 +120,20 @@ public class AuthServiceImpl implements IAuthService {
 		return member;
 	}
 	
+	@Override
+	public int registAdminMember(MembersDTO member) {
+		// 1. MembersDAO의 insertMembers(member)를 전달한다.
+		// 2. 영향받은 행의 수를 전달한다.
+		logger.info("멤버 : " + member.toString());
+		String encodedPassword = pwEncoder(member.getMember_pw());
+		member.setMember_authority("ROLE_ADMIN");
+		member.setMember_enabled(true);
+		member.setMember_pw(encodedPassword);
+		logger.info(member.toString());
+		int row = membersDAO.insertMembers(member);
+		return row;
+	}
+	
 	/**
 	 * 비밀번호를 암호화 하기 위해 사용하는 메서드
 	 * @param String password (plainText)
@@ -130,5 +144,6 @@ public class AuthServiceImpl implements IAuthService {
 		String encodedPassword = passwordEncoder.encode(password);
 		return encodedPassword;
 	}
+	
 
 }

@@ -17,6 +17,8 @@ public interface MembersDAO {
 	public int deleteByMemberId(Long member_id);
 	public MembersDTO selectByEmailId(String member_email);
 	public int count();
+	public int getCountByEmail(String member_email);
+	public int getCountByName(String member_name);
 	public List<MembersDTO> selectByPage(Pager pager);
 	public List<MembersDTO> selectByPageAndEmail(@Param("pager") Pager pager, @Param("member_email") String member_email);
 	public List<MembersDTO> selectByPageAndName(@Param("pager") Pager pager, @Param("member_name") String member_name);

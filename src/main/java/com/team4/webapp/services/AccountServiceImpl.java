@@ -162,26 +162,52 @@ public class AccountServiceImpl implements IAccountService {
 	
 	@Override
 	public List<MembersDTO> getAccountsList(Pager pager) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPage(pager);
+		return list;
 	}
 	
 	@Override
 	public List<MembersDTO> getAccountsListByEmail(Pager pager, String email) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPageAndEmail(pager,email);
+		return list;
 	}
 	
 	@Override
 	public List<MembersDTO> getAccountsListByName(Pager pager, String name) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPageAndName(pager,name);
+		return list;
 	}
 	@Override
 	public boolean modifyAccount(MembersDTO memberInfo) {
-		return false;
+		int row = membersDAO.updateMembersByAdmin(memberInfo);
+		if(row != 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	@Override
 	public boolean deleteAccount(Long member_id) {
-		return false;
+		int row = membersDAO.deleteByMemberId(member_id);
+		if(row != 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
-	
-	
+	@Override
+	public int getTotalMemberRows() {
+		int totalRow = membersDAO.count();
+		return totalRow;
+	}
+	@Override
+	public int getMemberRowsByEmail(String email) {
+		int countByEmail = membersDAO.getCountByEmail(email);
+		return countByEmail;
+	}
+	@Override
+	public int getMemberRowsByName(String name) {
+		int countByName = membersDAO.getCountByName(name);
+		return countByName;
+	}
 }

@@ -1,9 +1,14 @@
 package com.team4.webapp.services;
 
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.team4.webapp.dto.CategoriesDTO;
 import com.team4.webapp.dto.ColorsDTO;
+import com.team4.webapp.dto.ImageSaveDTO;
 import com.team4.webapp.dto.Pager;
 import com.team4.webapp.dto.ProductDetailsDTO;
 import com.team4.webapp.dto.ProductImgsDTO;
@@ -39,12 +44,7 @@ public interface IProductService {
 	 * @param ProductsDTO product
 	 * @return boolean
 	 */
-	boolean addProduct(ProductsDTO product, 
-			CategoriesDTO category, 
-			SubCategoriesDTO subcategory,
-			List<SizesDTO> size,
-			List<ColorsDTO> color,
-			List<ProductImgsDTO> productImg);
+	boolean addProduct(ProductsDTO product, JSONArray colors, JSONArray sizes);
 	
 	/**
 	 * 미구현 사항
@@ -56,6 +56,22 @@ public interface IProductService {
 	List<ProductsDTO> getProductLists(Pager pager);
 	
 	List<ProductsDTO> getProductListsBySubCategory(Pager pager, Long subcategory_id);
+	
+	int getCount();
+	
+	int getSpecificCount(Long subcategory_id);
+	
+	Map<String, Object> getAllCategories();
+	
+	ProductDetailsDTO getProductDetails(Long product_id);
+	
+	Long getSequence();
+	
+	ImageSaveDTO uploadImage(ImageSaveDTO data);
+	
+	String uploadMainImage(MultipartFile uploadFile);
+	
+	
 	
 	
 

@@ -22,7 +22,7 @@
 	<insert id="insertSizes"
 			parameterType="sizes">
 		<selectKey keyProperty="size_id" resultType="long" order="BEFORE">
-			select seq_sizes_size_id.nextval from dual
+			select seq_size_id.nextval from dual
 		</selectKey>
 		insert into sizes
 		(size_id, size_name, product_id)

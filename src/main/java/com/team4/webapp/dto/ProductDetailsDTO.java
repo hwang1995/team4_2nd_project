@@ -81,6 +81,7 @@ public class ProductDetailsDTO {
 
 		this.product_id= product.getProduct_id();
 		this.product_name = product.getProduct_name();
+		this.product_image = product.getProduct_image();
 		this.product_price = product.getProduct_price();
 		this.product_content = product.getProduct_content();
 		this.product_subcontent = product.getProduct_subcontent();

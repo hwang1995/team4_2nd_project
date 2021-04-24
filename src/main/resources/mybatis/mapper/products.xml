@@ -87,12 +87,16 @@
 	        where subcategory_id = #{subcategory_id}
 	        order by product_id desc
 	    )
-	    where rownum &lt;= #{endRowNo}
+	    where rownum &lt;= #{pager.endRowNo}
 	)
-	where rnum &gt;= #{startRowNo}
+	where rnum &gt;= #{pager.startRowNo}
 </select>
 
 <select id="count" resultType="int">
 	select count(*) from products
+</select>
+
+<select id="specificCount" parameterType="long" resultType="int">
+	select count(*) from products where subcategory_id = #{subcategory_id}
 </select>
 </mapper>

@@ -22,8 +22,8 @@ public interface ProductsDAO {
 	public List<ProductsDTO> selectBySubCategoryIdOrderByLowPrice(Long subCategory_id);
 	
 	public List<ProductsDTO> selectByPage(Pager pager);
-	public List<ProductsDTO> selectByPageAndSubCategory(@Param("pager") Pager pager, @Param("subcategory_id") Long subcategory_id);
+	public List<ProductsDTO> selectByPageAndSubCategory(Pager pager, @Param("subcategory_id") Long subcategory_id);
 	public int count();
-	
+	public int specificCount(Long subcategory_id);
 	public Long getSequence();
 }

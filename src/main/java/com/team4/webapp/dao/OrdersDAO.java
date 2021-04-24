@@ -20,6 +20,7 @@ public interface OrdersDAO {
 	public int countOrders(Long member_id);
 	
 	public int count();
+	public int countByDelivery(String order_delivery_status);
 	public List<OrdersDTO> selectAllByPage(Pager pager);
 	public List<OrdersDTO> selectByPageAndOrderId(@Param("pager") Pager pager, @Param("order_id") Long order_id);
 	public List<OrdersDTO> selectByPageAndDelivery(@Param("pager") Pager pager, @Param("order_delivery_status") String order_delivery_status);

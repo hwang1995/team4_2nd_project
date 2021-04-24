@@ -39,7 +39,13 @@
 	</select>
 	
 	<select id="count" resultType="int">
-		select count(*) from members
+		select count(*) from members where member_authority='ROLE_USER'
+	</select>
+	<select id="getCountByEmail" parameterType="string" resultType="int">
+		select count(*) from members where member_email=#{member_email} and member_authority='ROLE_USER'
+	</select>
+	<select id="getCountByName" parameterType="string" resultType="int">
+		select count(*) from members where member_name=#{member_name} and member_authority='ROLE_USER'
 	</select>
 	
 	<select id="selectByPage" parameterType="pager" resultType="members">
@@ -49,6 +55,7 @@
 	    from (
 	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
 	        from members
+	        where member_authority='ROLE_USER'
 	        order by member_id desc
 	    )
 	    where rownum &lt;= #{endRowNo}
@@ -64,12 +71,12 @@
 	    from (
 	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
 	        from members
-	        where member_email = #{member_email}
+	        where member_email = #{member_email} and member_authority='ROLE_USER'
 	        order by member_id desc
 	    )
-	    where rownum &lt;= #{endRowNo}
+	    where rownum &lt;= #{pager.endRowNo}
 	)
-	where rnum &gt;= #{startRowNo}
+	where rnum &gt;= #{pager.startRowNo}
 	
 	</select>
 	
@@ -80,23 +87,22 @@
 	    from (
 	        select member_id, member_email, member_name, member_tel, member_address, member_authority, member_enabled
 	        from members
-	        where member_name = #{member_name}
+	        where member_name = #{member_name} and member_authority='ROLE_USER'
 	        order by member_id desc
 	    )
-	    where rownum &lt;= #{endRowNo}
+	    where rownum &lt;= #{pager.endRowNo}
 	)
-	where rnum &gt;= #{startRowNo}
+	where rnum &gt;= #{pager.startRowNo}
 	
 	</select>
 	
 	<update id="updateMembersByAdmin" parameterType="members">
 		update members set
-			member_email=#{member_email},
 			member_name=#{member_name},
 			member_tel=#{member_tel},
 			member_address=#{member_address},
 			member_enabled=#{member_enabled}
-		where member_email=#{member_email}
+		where member_id=#{member_id}
 	</update>
 	
 	

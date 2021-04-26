@@ -2,9 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.team4.webapp.dao.OrdersDAO">
 <select id="selectOrdersList" resultType="orders">
-	select orderlist_id, orderlist_quantity, product_color, product_size, order_id, product_id
+	select order_id, order_date, order_bank,
+		 order_delivery_charge, order_payment_status, 
+		 order_delivery_status, recipient_name, 
+		 recipient_address, recipient_tel , member_id
 	from orders
-	order by order_id desc
+	order by order_id asc
 </select>
 <select id="selectByOrderId" parameterType="long" resultType="orders">
 	select order_id, order_date, order_bank,

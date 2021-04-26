@@ -36,6 +36,8 @@
 		where product_id=#{product_id}
 </update>
 
+
+
 <update id="deleteProduct" parameterType="long">
 	update products set
 		product_deleted = 'YES'

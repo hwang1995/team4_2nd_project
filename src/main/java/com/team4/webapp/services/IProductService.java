@@ -71,6 +71,8 @@ public interface IProductService {
 	
 	String uploadMainImage(MultipartFile uploadFile);
 	
+	ProductsDTO updateProductInfo(ProductsDTO product);
+	
 	
 	
 	

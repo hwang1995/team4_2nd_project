@@ -3,12 +3,10 @@ package com.team4.webapp.api;
 import java.io.File;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,10 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team4.webapp.dto.ImageSaveDTO;
 import com.team4.webapp.dto.Pager;
 import com.team4.webapp.dto.ProductDetailsDTO;
-import com.team4.webapp.dto.ProductImgsDTO;
 import com.team4.webapp.dto.ProductsDTO;
 import com.team4.webapp.services.ProductServiceImpl;
 
@@ -119,12 +114,15 @@ public class ProductsController {
 	}
 	
 	@PutMapping("")
-	public void modifyProduct(@RequestBody Map<String, Object> productInfo) {
+	public ProductsDTO modifyProduct(@RequestBody ProductsDTO product) {
+		ProductsDTO result = productService.updateProductInfo(product);
+		return result;
 		
 	}
 	
-	@DeleteMapping("/{product_id}")
+	@PutMapping("/{product_id}")
 	public void deleteProduct(@PathVariable Long product_id) {
+		productService.removeProduct(product_id);
 		
 	}
 	

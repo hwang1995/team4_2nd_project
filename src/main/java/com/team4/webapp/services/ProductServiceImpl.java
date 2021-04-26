@@ -152,7 +152,11 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public boolean removeProduct(Long product_id) {
-		return false;
+		int rows = productDAO.deleteProduct(product_id);
+		if(rows != 1) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -290,6 +294,12 @@ public class ProductServiceImpl implements IProductService {
 		}
 		data.setBase64("");
 		return data;
+	}
+
+	@Override
+	public ProductsDTO updateProductInfo(ProductsDTO product) {
+		productDAO.updateProducts(product);
+		return product;
 	}
 
 }

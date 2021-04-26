@@ -76,9 +76,7 @@ public class DashboardService {
 				ds.setOrder_date(orderDate);
 				ds.setSum_price(total);
 				dateSums.add(ds);
-				System.out.println(dateSums);
-				System.out.println(orderDate);
-				System.out.println(total);
+
 				orderDate = dateSum.getOrder_date();
 				total = dateSum.getSum_price();
 			}

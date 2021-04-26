@@ -8,6 +8,7 @@ public class ProductsDTO {
 	private String product_content;
 	private String product_subcontent;
 	private Long subcategory_id;
+	private String product_deleted;
 	
 	// Getters & Setters
 	public Long getProduct_id() {
@@ -67,17 +68,29 @@ public class ProductsDTO {
 		this.subcategory_id = subcategory_id;
 	}
 	
-	// For Testing purpose -> DTO의 값을 한번에 보고 싶을 때 사용
-	@Override
-	public String toString() {
-		return "ProductsDTO [product_id=" + product_id + ", product_name=" + product_name + ", product_price="
-				+ product_price + ", product_image=" + product_image + ", product_content=" + product_content
-				+ ", product_subcontent=" + product_subcontent + ", subcategory_id=" + subcategory_id + "]";
+
+	public String getProduct_deleted() {
+		return product_deleted;
 	}
+
+
+	public void setProduct_deleted(String product_deleted) {
+		this.product_deleted = product_deleted;
+	}
+
 
 	public void setImagePath() {
 		String filePath = "/webapp/image?path=" + this.getProduct_image();
 		this.product_image = filePath;
+	}
+
+
+	@Override
+	public String toString() {
+		return "ProductsDTO [product_id=" + product_id + ", product_name=" + product_name + ", product_price="
+				+ product_price + ", product_image=" + product_image + ", product_content=" + product_content
+				+ ", product_subcontent=" + product_subcontent + ", subcategory_id=" + subcategory_id
+				+ ", product_deleted=" + product_deleted + "]";
 	}
 	
 	

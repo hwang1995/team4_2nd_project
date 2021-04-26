@@ -55,7 +55,7 @@ public class DashboardController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("totalMembers", totalMembers);
 		map.put("totalQnaWaiting", totalQnaWaiting);
-		map.put("totalQnaFinsihed", totalQnaFinished);
+		map.put("totalQnaFinished", totalQnaFinished);
 		map.put("totalProducts", totalProducts);
 		map.put("totalDeliveryWaiting", totalDeliveryWaiting);
 		map.put("totalDeliveryFinished", totalDeliveryFinished);

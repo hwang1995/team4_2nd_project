@@ -228,6 +228,7 @@ public class ProductServiceImpl implements IProductService {
 		Long productID = product.getProduct_id();
 		logger.info(product.toString());
 		// Insert Product Data
+		
 		int row = productDAO.insertProducts(product);
 
 		if (row != 1) {
@@ -287,6 +288,7 @@ public class ProductServiceImpl implements IProductService {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		data.setBase64("");
 		return data;
 	}
 

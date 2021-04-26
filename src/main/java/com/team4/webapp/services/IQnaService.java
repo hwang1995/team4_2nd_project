@@ -85,5 +85,4 @@ public interface IQnaService {
 	int getCountByCategory(String qna_category);
 	int getCountByAnswer(String qna_answer);
 	int getCountByFinishedAnswer(String qna_answer);
-	Map<String, Object> getDash();
 }

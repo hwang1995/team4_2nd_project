@@ -26,4 +26,6 @@ public interface ProductsDAO {
 	public int count();
 	public int specificCount(Long subcategory_id);
 	public Long getSequence();
+	
+	public int deleteProduct(Long product_id);
 }

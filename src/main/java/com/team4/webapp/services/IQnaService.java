@@ -4,6 +4,7 @@ package com.team4.webapp.services;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.team4.webapp.dto.Pager;
 import com.team4.webapp.dto.QnaMembersDTO;
@@ -84,4 +85,5 @@ public interface IQnaService {
 	int getCountByCategory(String qna_category);
 	int getCountByAnswer(String qna_answer);
 	int getCountByFinishedAnswer(String qna_answer);
+	Map<String, Object> getDash();
 }

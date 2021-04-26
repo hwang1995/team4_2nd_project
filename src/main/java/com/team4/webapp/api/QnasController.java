@@ -92,4 +92,10 @@ public class QnasController {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/dash")
+	public Map<String, Object> getDashBoard() {
+		Map<String, Object> map = qnasService.getDash();
+		return map;
+	}
 }

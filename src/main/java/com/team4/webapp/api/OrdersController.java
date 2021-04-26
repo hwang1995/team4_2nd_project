@@ -38,17 +38,17 @@ public class OrdersController {
 		if(orderId==null && delivery==null) {
 			//전체주문
 			totalRows = orderService.getTotalOrdersCount();
-			pager = new Pager(5, 5, totalRows, pageNo);
+			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersList(pager);
 		} else if(delivery==null) {
 			//주문번호로 검색
 			totalRows = 1;
-			pager = new Pager(5, 5, totalRows, pageNo);
+			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersListByOrderId(pager, orderId);
 		} else{
 			//배송상태로 검색
 			totalRows = orderService.getByDeliveryOrdersCount(delivery);
-			pager = new Pager(5, 5, totalRows, pageNo);
+			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersListByDelivery(pager, delivery);
 		}
 		map.put("pager", pager);

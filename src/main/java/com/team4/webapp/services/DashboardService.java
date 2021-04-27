@@ -26,13 +26,19 @@ public class DashboardService {
 	@Autowired
 	private ProductsDAO productsDAO;
 	
+	/**
+	 * 서비스 목적
+	 * - 차트를 만들기 위해 주문날짜와
+	 * - 일별 총합계를 구할 수 있도록 제공하는 서비스
+	 * @return List<OrderDateSumDTO>
+	 */
 	public List<OrderDateSumDTO> getDashboardChart() {
-		List<OrderDateSumDTO> orderDateSums = new ArrayList<>();
 		List<OrderDateSumDTO> dateSums = new ArrayList<>();
+		List<OrderDateSumDTO> orderDateSums = new ArrayList<>();
 		List<OrdersDTO> orders = ordersDAO.selectOrdersList();
 		
-		//1.MyPageListDTO는 주문번호, 주문날짜, MyPageDTO 리스트를 필드로 가지고 있음.
-		//2.주문번호와 주문날짜를 MyPageListDTO에 세팅해줌.
+		//1.OrderDateSumDTO는 주문날짜, 총합계를 필드로 가지고 있음.
+		//2.주문날짜를 OrderDateSumDTO에 세팅해줌.
 		//3.주문번호로 주문리스트 정보를 받아옴.
 		for(OrdersDTO order : orders) {
 			List<MyPageDTO> orderInfoList = new ArrayList<MyPageDTO>();
@@ -43,8 +49,7 @@ public class DashboardService {
 			//1.MyPageDTO는 OrderList와 Product에 대한 정보를 가지고 있음.
 			//2.주문리스트의 상품정보를 받아옴.
 			//3.MyPageDTO에 OrderList와 Product 정보를 세팅해줌.
-			//4.DB에 저장되어 있는 이미지명을 새로운 Path로 설정해줌.
-			//5.MyPageDTO를 리스트로 추가해줌.
+			//4.MyPageDTO를 리스트로 추가해줌.
 			for(OrderlistsDTO orderlist : orderlists) {
 				ProductsDTO products = productsDAO.selectByProductId(orderlist.getProduct_id());
 				MyPageDTO orderInfo = new MyPageDTO();
@@ -53,6 +58,9 @@ public class DashboardService {
 				orderInfoList.add(orderInfo);
 			}
 			
+			//1.각 주문별로 총합계를 구함.
+			//2.총합계를 OrderDateSumDTO에 세팅해줌.
+			//3.OrderDateSumDTO 리스트에 OrderDateSumDTO를 추가해줌.
 			long totalPrice = 0;
 			for(MyPageDTO list : orderInfoList) {
 				long tempPrice = (long) list.getProduct_quantity() * (long) list.getProduct_price();
@@ -63,9 +71,15 @@ public class DashboardService {
 
 		}
 		
+		//1.만들어진 OrderDateSumDTO 리스트로 새로운 OrderDateSumDTO 리스트를 세팅해줌.
+		//2.orderDate를 OrderDateSumDTO 리스트의 첫번째 것으로 세팅함.
 		Date orderDate = new Date();
 		orderDate = orderDateSums.get(0).getOrder_date();
 		long total = 0;
+		
+		//1.만약 orderDate의 날짜와 OrderDateSumDTO의 값의 날짜가 같다면, 총합계에 더해줌.
+		//2.같지 않다면, orderDate와 총합계를 최종 OrderDateSumDTO 리스트에 추가해줌.
+		//3.orderDate와 총합계를 새로운 것으로 세팅하고 반복문 진행.
 		for(OrderDateSumDTO dateSum : orderDateSums) {
 			if(dateSum.getOrder_date().getYear() == orderDate.getYear()
 					&& dateSum.getOrder_date().getMonth() == orderDate.getMonth()
@@ -76,11 +90,16 @@ public class DashboardService {
 				ds.setOrder_date(orderDate);
 				ds.setSum_price(total);
 				dateSums.add(ds);
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/features_dashboard
 				orderDate = dateSum.getOrder_date();
 				total = dateSum.getSum_price();
 			}
 		}
+		//1.마지막 orderDate와 총합계를 최종 OrderDateSumDTO 리스트에 추가해줌.
+		//2.최종 OrderDateSumDTO 리스트를 리턴해줌.
 		OrderDateSumDTO ds = new OrderDateSumDTO();
 		ds.setOrder_date(orderDate);
 		ds.setSum_price(total);

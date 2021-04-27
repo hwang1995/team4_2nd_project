@@ -34,7 +34,6 @@ public class OrdersController {
 		Pager pager;
 		List<OrdersDTO> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		logger.info(orderId + "");
 		if(orderId==null && delivery==null) {
 			//전체주문
 			totalRows = orderService.getTotalOrdersCount();

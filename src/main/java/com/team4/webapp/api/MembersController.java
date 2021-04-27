@@ -29,6 +29,13 @@ public class MembersController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
 	
+	/**
+	 * 회원의 정보를 검색 조건을 기반으로 조회하기 위한 컨트롤러(전체 회원 조회, 이메일로 검색한 회원 조회, 이름으로 검색한 회원 조회)
+	 * @param pageNo 
+	 * @param email
+	 * @param name
+	 * @return Map
+	 */
 	@GetMapping("")
 	public Map<String, Object> getMembersList(@RequestParam(defaultValue = "1") int pageNo, String email, String name){
 		
@@ -36,24 +43,35 @@ public class MembersController {
 		List<MembersDTO> list = null;
 		Pager pager = null; 
 		
+		//검색 조건이 들어오지 않을 경우 전체 회원 조회
 		if(email == null && name == null) {
 			int totalRows = accountServiceImpl.getTotalMemberRows();
 			pager = new Pager(5, 5, totalRows, pageNo);
 			list = accountServiceImpl.getAccountsList(pager);
-		}else if(email != null && name == null) {
+		}
+		//검색 조건에 email이 들어왔을 경우 이메일로 회원 조회
+		else if(email != null && name == null) {
 			int totalRows = accountServiceImpl.getMemberRowsByEmail(email);
 			pager = new Pager(5, 5, totalRows, pageNo);
 			list = accountServiceImpl.getAccountsListByEmail(pager, email);
-		}else if(email == null && name != null) {
+		}
+		//검색 조건에 name이 들어왔을 경우 이름으로 회원 조회
+		else if(email == null && name != null) {
 			int totalRows = accountServiceImpl.getMemberRowsByName(name);
 			pager = new Pager(5, 5, totalRows, pageNo);
 			list = accountServiceImpl.getAccountsListByName(pager, name);
 		}
+		//map에 페이저와 검색 조건으로 조회한 회원 list를 put
 		map.put("pager", pager);
 		map.put("list", list);
+		
 		return map;
 	}
 	
+	/**
+	 * 관리자가 회원 정보를 수정하기 위한 컨트롤러
+	 * @param memberInfo
+	 */
 	@PutMapping("")
 	public void modifyMembersInfo(@RequestBody MembersDTO memberInfo) {
 		boolean modifiedMember = accountServiceImpl.modifyAccount(memberInfo);
@@ -64,6 +82,10 @@ public class MembersController {
 		}
 	}
 	
+	/**
+	 * 관리자가 회원을 삭제하기 위한 컨트롤러
+	 * @param member_id
+	 */
 	@DeleteMapping("/{member_id}")
 	public void deleteMember(@PathVariable Long member_id) {
 		boolean deletedMember = accountServiceImpl.deleteAccount(member_id);

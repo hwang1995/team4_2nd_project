@@ -28,6 +28,11 @@ public class AuthController {
 	@Autowired
 	private AuthServiceImpl authServiceImpl;
 	
+	/**
+	 * 관리자 서비스를 이용하기 위해 로그인시 필요한 컨트롤러(로그인 시 들어온 회원의 정보를 jwt를 사용하여 로그인 서비스)
+	 * @param userInfo 
+	 * @return Map
+	 */
 	@PostMapping("/login")
 	public Map<String, String> login(@RequestBody Map<String, String> userInfo){
 		// 인증 데이터 얻기
@@ -52,6 +57,10 @@ public class AuthController {
 		return map;
 	}
 	
+	/**
+	 * 관리자 서비스를 사용하기 위해 회원가입하기 위한 컨트롤러
+	 * @param memberInfo 
+	 */
 	@PostMapping("/register")
 	public void register(@RequestBody MembersDTO memberInfo) {
 		int row = authServiceImpl.registAdminMember(memberInfo);
@@ -64,7 +73,7 @@ public class AuthController {
 	/**
 	 * 회원가입시에 존재하는 이메일인지 확인하기 위해 사용하는 컨트롤러
 	 * @param MembersDTO member
-	 * @return String
+	 * @return boolean
 	 */
 	@PostMapping("/existed-email")
 	public boolean isExistedEmail(@RequestBody MembersDTO member) {

@@ -1,40 +1,23 @@
 package com.team4.webapp.services;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.team4.webapp.dao.MembersDAO;
-import com.team4.webapp.dao.OrderlistsDAO;
-import com.team4.webapp.dao.OrdersDAO;
-import com.team4.webapp.dao.ProductsDAO;
 import com.team4.webapp.dao.QnasDAO;
-import com.team4.webapp.dto.MyPageDTO;
-import com.team4.webapp.dto.OrderDateSumDTO;
-import com.team4.webapp.dto.OrderlistsDTO;
-import com.team4.webapp.dto.OrdersDTO;
 import com.team4.webapp.dto.Pager;
-import com.team4.webapp.dto.ProductsDTO;
 import com.team4.webapp.dto.QnaMembersDTO;
 import com.team4.webapp.dto.QnasDTO;
 
 @Service
 public class QnaServiceImpl implements IQnaService {
+	
 	@Autowired
 	private QnasDAO qnaDAO;
+	
 	@Autowired
 	private MembersDAO memberDAO;
-	@Autowired
-	private OrdersDAO ordersDAO;
-	@Autowired
-	private OrderlistsDAO orderlistsDAO;
-	@Autowired
-	private ProductsDAO productsDAO;
 	
 	
 	/**
@@ -73,6 +56,7 @@ public class QnaServiceImpl implements IQnaService {
 	public List<QnaMembersDTO> getQnasList(Pager pager) {
 		List<QnaMembersDTO> qnaMemberList = new ArrayList<QnaMembersDTO>();
 		List<QnasDTO> qnaList = qnaDAO.selectByPage(pager);
+		
 		for(QnasDTO qna : qnaList) {
 			QnaMembersDTO qnaMember = new QnaMembersDTO();
 			qnaMember.setQnasInfo(qna);
@@ -80,6 +64,7 @@ public class QnaServiceImpl implements IQnaService {
 			settingQna(qnaMember);
 			qnaMemberList.add(qnaMember);
 		}
+		
 		return qnaMemberList;
 	}
 
@@ -169,8 +154,10 @@ public class QnaServiceImpl implements IQnaService {
 	@Override
 	public List<QnaMembersDTO> getQnasListByFinishedAnswer(Pager pager, String answer) {
 		List<QnaMembersDTO> qnaMemberList = new ArrayList<QnaMembersDTO>();
+		
 		try {
 			List<QnasDTO> qnaList = qnaDAO.selectByPageAndFinishedAnswer(pager, answer);
+			
 			for(QnasDTO qna : qnaList) {
 				QnaMembersDTO qnaMember = new QnaMembersDTO();
 				qnaMember.setQnasInfo(qna);
@@ -179,27 +166,33 @@ public class QnaServiceImpl implements IQnaService {
 				qnaMemberList.add(qnaMember);
 			}
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
+		
 		return qnaMemberList;
 	}
 	
 	//QnaMembersDTO에 답변상태와 분류를 세팅해줌
 	public void settingQna(QnaMembersDTO qnaMember) {
-		if(qnaMember.getQna_answer().equals("답변중")) {
+		String qnaAnswer = qnaMember.getQna_answer();
+		String qnaCategory = qnaMember.getQna_category();
+		
+		if(qnaAnswer.equals("답변중")) {
 			qnaMember.setAnswer_status("ⓧ");
 		} else {
 			qnaMember.setAnswer_status("ⓞ");
 		}
-		if(qnaMember.getQna_category().equals("products")) {
+		
+		if(qnaCategory.equals("products")) {
 			qnaMember.setCategory_status("상품문의");
-		} else if(qnaMember.getQna_category().equals("delivery")) {
+		} else if(qnaCategory.equals("delivery")) {
 			qnaMember.setCategory_status("배송문의");
-		} else if(qnaMember.getQna_category().equals("exchange")) {
+		} else if(qnaCategory.equals("exchange")) {
 			qnaMember.setCategory_status("교환문의");
 		} else {
 			qnaMember.setCategory_status("기타문의");
 		}
+		
 	}
 
 	/**
@@ -212,8 +205,10 @@ public class QnaServiceImpl implements IQnaService {
 	public QnaMembersDTO getQnaById(Long qna_id) {
 		QnasDTO qna = qnaDAO.selectByQnaId(qna_id);
 		QnaMembersDTO qnaMember = new QnaMembersDTO();
+		
 		qnaMember.setQnasInfo(qna);
 		qnaMember.setMember_email(memberDAO.selectByMemberId(qna.getMember_id()).getMember_email());
+		
 		return qnaMember;
 	}
 
@@ -225,11 +220,13 @@ public class QnaServiceImpl implements IQnaService {
 	@Override
 	public boolean modifyQna(QnasDTO qnaInfo) {
 		int row = qnaDAO.updateQnas(qnaInfo);
+		
 		if(row != 1) {
 			return false;
 		} else {
 			return true;
 		}
+		
 	}
 
 	/**
@@ -240,19 +237,29 @@ public class QnaServiceImpl implements IQnaService {
 	@Override
 	public boolean deleteQna(Long qna_id) {
 		int row = qnaDAO.deleteByQnaId(qna_id);
+		
 		if(row != 1) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-
+	
+	/**
+	 * Qna 테이블의 행의 수를 가져오는 서비스
+	 * @return int
+	 */
 	@Override
 	public int getCount() {
 		int row = qnaDAO.count();
 		return row;
 	}
 	
+	/**
+	 * Qna 테이블에서 이메일의 총 행의 수를 가져오는 서비스
+	 * @param String member_email
+	 * @return int
+	 */
 	@Override
 	public int getCountByEmail(String member_email) {
 		try {
@@ -264,6 +271,11 @@ public class QnaServiceImpl implements IQnaService {
 		}
 	}
 
+	/**
+	 * Qna 테이블에서 카테고리별로 총 행의 수를 가져오는 서비스
+	 * @param String qna_category
+	 * @return int 
+	 */
 	@Override
 	public int getCountByCategory(String qna_category) {
 		try {
@@ -273,7 +285,12 @@ public class QnaServiceImpl implements IQnaService {
 			return 0;
 		}
 	}
-
+	
+	/**
+	 * Qna 테이블에서 응답별로 총 행의 수를 가져오는 서비스
+	 * @param String qna_answer
+	 * @return int
+	 */
 	@Override
 	public int getCountByAnswer(String qna_answer) {
 		try {
@@ -284,6 +301,11 @@ public class QnaServiceImpl implements IQnaService {
 		}
 	}
 
+	/**
+	 * Qna 테이블에서 완료된 응답별로 총 행의 수를 가져오는 서비스
+	 * @param String qna_answer
+	 * @return int
+	 */
 	@Override
 	public int getCountByFinishedAnswer(String qna_answer) {
 		try {

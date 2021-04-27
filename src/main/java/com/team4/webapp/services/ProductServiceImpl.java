@@ -39,12 +39,16 @@ public class ProductServiceImpl implements IProductService {
 
 	@Autowired
 	private ProductsDAO productDAO;
+	
 	@Autowired
 	private SubCategoriesDAO subCategoriesDAO;
+	
 	@Autowired
 	private ProductImgsDAO productImgsDAO;
+	
 	@Autowired
 	private ColorsDAO colorsDAO;
+	
 	@Autowired
 	private SizesDAO sizesDAO;
 
@@ -232,16 +236,17 @@ public class ProductServiceImpl implements IProductService {
 		String categoryFolder = "/main/";
 		String uuid = UUID.randomUUID().toString();
 		String returnFile = null;
+		
 		try {
 			String[] fileFragments = uploadFile.getOriginalFilename().split("\\.");
 			String ext = fileFragments[fileFragments.length - 1];
 			returnFile = categoryFolder + uuid + "." + ext;
 			File file = new File(filePath + returnFile); 
 			uploadFile.transferTo(file);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return returnFile;
 	}
 
@@ -346,6 +351,7 @@ public class ProductServiceImpl implements IProductService {
 		
 		// 모든 작업이 끝났다면 base64 인코딩 스트링이 필요 없으므로 빈칸으로 set
 		data.setBase64("");
+		
 		return data;
 	}
 	
@@ -384,6 +390,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public ProductsDTO updateProductInfo(ProductsDTO product) {
 		productDAO.updateProducts(product);
+		
 		return product;
 	}
 	
@@ -395,9 +402,11 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public boolean removeProduct(Long product_id) {
 		int rows = productDAO.deleteProduct(product_id);
+		
 		if(rows != 1) {
 			return false;
 		}
+		
 		return true;
 	}
 

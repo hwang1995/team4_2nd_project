@@ -33,22 +33,23 @@ public class QnasController {
 	@Autowired
 	private QnaServiceImpl qnasService;
 	
-	//Q&A 목록을 보여줌. selectOption 별로 검색을 하여 목록을 보여줌.
+	// Q&A 목록을 보여줌. selectOption 별로 검색을 하여 목록을 보여줌.
 	@GetMapping("")
 	public Map<String, Object> getQnasList(@RequestParam(defaultValue = "1") int pageNo, String member_email, String qna_category, String qna_answer) {
 		int totalRows;
 		Pager pager = null;
 		List<QnaMembersDTO> list = new ArrayList<>();
-		//email이 들어왔다면 email로 리스트를 가져옴
+		
+		// email이 들어왔다면 email로 리스트를 가져옴
 		if(member_email != null) {
 			totalRows = qnasService.getCountByEmail(member_email);
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasListById(pager, member_email);
-		} else if(qna_category != null) {	//category로 리스트 가져옴
+		} else if (qna_category != null) {	//category로 리스트 가져옴
 			totalRows = qnasService.getCountByCategory(qna_category);
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasListByCategory(pager, qna_category);
-		} else if(qna_answer != null) {
+		} else if (qna_answer != null) {
 			if(qna_answer.equals("답변중")) {		//Q&A 답변이 안된 리스트를 가져옴
 				totalRows = qnasService.getCountByAnswer(qna_answer);
 				pager = new Pager(10, 5, totalRows, pageNo);
@@ -64,9 +65,11 @@ public class QnasController {
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasList(pager);
 		}
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("qnas", list);
 		map.put("pager", pager);
+		
 		return map;
 	}
 	
@@ -81,6 +84,7 @@ public class QnasController {
 	@PutMapping("")
 	public QnasDTO modifyQna(@RequestBody QnasDTO qna, HttpServletResponse response) {
 		boolean result = qnasService.modifyQna(qna);
+		
 		if(result) {
 			return qna;
 		} else {
@@ -93,6 +97,7 @@ public class QnasController {
 	@DeleteMapping("/{qna_id}")
 	public void deleteQna(@PathVariable Long qna_id, HttpServletResponse response) {
 		boolean result = qnasService.deleteQna(qna_id);
+		
 		if(!result) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}

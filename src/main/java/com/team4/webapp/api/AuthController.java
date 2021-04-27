@@ -64,9 +64,10 @@ public class AuthController {
 	@PostMapping("/register")
 	public void register(@RequestBody MembersDTO memberInfo) {
 		int row = authServiceImpl.registAdminMember(memberInfo);
+		
 		if(row != 0) {
 			logger.info("회원가입 성공");
-		}else {
+		} else {
 			logger.info("회원가입 실패");
 		}
 	}
@@ -78,10 +79,11 @@ public class AuthController {
 	@PostMapping("/existed-email")
 	public boolean isExistedEmail(@RequestBody MembersDTO member) {
 		String email = member.getMember_email();
-		if(email !="") {
+		
+		if(email != "") {
 			boolean result = authServiceImpl.isExistedEmail(email);
 			return result;
-		}else {
+		} else {
 			return false;
 		}
 	}

@@ -41,24 +41,27 @@ public class OrdersController {
 		Pager pager;
 		List<OrdersDTO> list = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();
-		if(orderId==null && delivery==null) {
+		
+		if(orderId == null && delivery == null) {
 			//전체주문
 			totalRows = orderService.getTotalOrdersCount();
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersList(pager);
-		} else if(delivery==null) {
+		} else if(delivery == null) {
 			//주문번호로 검색
 			totalRows = 1;
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersListByOrderId(pager, orderId);
-		} else{
+		} else {
 			//배송상태로 검색
 			totalRows = orderService.getByDeliveryOrdersCount(delivery);
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = orderService.getOrdersListByDelivery(pager, delivery);
 		}
+		
 		map.put("pager", pager);
 		map.put("orders", list);
+		
 		return map;
 	}
 	

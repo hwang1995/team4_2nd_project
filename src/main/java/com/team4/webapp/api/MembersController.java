@@ -61,6 +61,7 @@ public class MembersController {
 			pager = new Pager(5, 5, totalRows, pageNo);
 			list = accountServiceImpl.getAccountsListByName(pager, name);
 		}
+		
 		//map에 페이저와 검색 조건으로 조회한 회원 list를 put
 		map.put("pager", pager);
 		map.put("list", list);
@@ -75,9 +76,10 @@ public class MembersController {
 	@PutMapping("")
 	public void modifyMembersInfo(@RequestBody MembersDTO memberInfo) {
 		boolean modifiedMember = accountServiceImpl.modifyAccount(memberInfo);
+		
 		if(modifiedMember == true) {
 			logger.info("수정 완료");
-		}else {
+		} else {
 			logger.info("수정 오류");
 		}
 	}
@@ -89,9 +91,10 @@ public class MembersController {
 	@DeleteMapping("/{member_id}")
 	public void deleteMember(@PathVariable Long member_id) {
 		boolean deletedMember = accountServiceImpl.deleteAccount(member_id);
+		
 		if(deletedMember == true) {
 			logger.info("삭제 완료");
-		}else {
+		} else {
 			logger.info("삭제 오류");
 		}
 	}

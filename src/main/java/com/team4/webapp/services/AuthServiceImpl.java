@@ -14,6 +14,7 @@ import com.team4.webapp.dto.MembersDTO;
 
 @Service
 public class AuthServiceImpl implements IAuthService {
+	
 	@Autowired
 	private MembersDAO membersDAO;
 	
@@ -130,14 +131,16 @@ public class AuthServiceImpl implements IAuthService {
 	public int registAdminMember(MembersDTO member) {
 		// 1. MembersDAO의 insertMembers(member)를 전달한다.
 		// 2. 영향받은 행의 수를 전달한다.
-		logger.info("멤버 : " + member.toString());
-		//member객체에 관리자 설정에 필요한 정보들을 setting
+		
+		// member 객체에 관리자 설정에 필요한 정보들을 setting
 		String encodedPassword = pwEncoder(member.getMember_pw());
+		
 		member.setMember_authority("ROLE_ADMIN");
 		member.setMember_enabled(true);
 		member.setMember_pw(encodedPassword);
-		logger.info(member.toString());
+		
 		int row = membersDAO.insertMembers(member);
+		
 		return row;
 	}
 	

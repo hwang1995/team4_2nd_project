@@ -54,6 +54,7 @@ public class DashboardController {
 		// chart 데이터를 가져온다.
 		List<OrderDateSumDTO> chart = dashboardService.getDashboardChart();
 		Map<String, Object> map = new HashMap<String, Object>();
+		
 		map.put("totalMembers", totalMembers);
 		map.put("totalQnaWaiting", totalQnaWaiting);
 		map.put("totalQnaFinished", totalQnaFinished);
@@ -61,6 +62,7 @@ public class DashboardController {
 		map.put("totalDeliveryWaiting", totalDeliveryWaiting);
 		map.put("totalDeliveryFinished", totalDeliveryFinished);
 		map.put("chart", chart);
+		
 		return map;
 	}
 

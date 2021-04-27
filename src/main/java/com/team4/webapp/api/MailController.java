@@ -19,9 +19,12 @@ public class MailController {
 	@Autowired
 	private MailService mailService;
 	
+	/**
+	 * 이메일을 보내기 위해 필요한 컨트롤러
+	 * @param MailDTO mailDTO
+	 */
 	@PostMapping("")
 	public void execMail(@RequestBody MailDTO mailDTO) {
-		logger.info(mailDTO.toString());
 		mailService.mailSend(mailDTO);
 	}
 	

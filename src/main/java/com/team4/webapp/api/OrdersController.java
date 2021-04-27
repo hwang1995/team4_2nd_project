@@ -28,6 +28,13 @@ public class OrdersController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
 	
+	/**
+	 * 전체검색, 주문번호로 검색, 배송상태로 검색시 주문리스트를 전달하기 위한 컨트롤러
+	 * @param pageNo
+	 * @param orderId 주문번호
+	 * @param delivery 배송상태
+	 * @return Map<String, Object> (Pager, List<OrdersDTO>)
+	 */
 	@GetMapping("")
 	public Map<String, Object> getOrdersList(@RequestParam(defaultValue = "1") int pageNo, Long orderId, String delivery){
 		int totalRows = 0;
@@ -55,12 +62,22 @@ public class OrdersController {
 		return map;
 	}
 	
+	/**
+	 * 주문번호를 통해 주문상세정보를 전달하기 위한 컨트롤러
+	 * @param order_id
+	 * @return Map<String, Object>
+	 */
 	@GetMapping("/{order_id}")
 	public Map<String, Object> getOrderInfo(@PathVariable Long order_id){
 		Map<String, Object> map = orderService.getOrderInfo(order_id);
 		return map;
 	}
 	
+	/**
+	 * 주문정보수정 내용을 전달하기 위한 컨트롤러
+	 * @param orderInfo 수정전 주문정보
+	 * @return Map<String, Object> (OrdersDTO)
+	 */
 	@PutMapping("")
 	public Map<String, Object> modifyOrder(@RequestBody OrdersDTO orderInfo){
 		OrdersDTO order = orderService.modifyOrder(orderInfo);

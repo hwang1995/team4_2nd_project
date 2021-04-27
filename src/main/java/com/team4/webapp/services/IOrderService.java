@@ -96,7 +96,7 @@ public interface IOrderService {
 	/**
 	 * 상세 주문 조회를 위해 제공하는 인터페이스
 	 * @param Long order_id
-	 * @return Map<String, Object> -> ordersDTO, membersDTO, List<OrderlistsDTO>, List<MyPageDTO>
+	 * @return Map<String, Object> -> ordersDTO, membersDTO, List<MyPageDTO>, totalPrice
 	 */
 	Map<String, Object> getOrderInfo(Long order_id);
 	

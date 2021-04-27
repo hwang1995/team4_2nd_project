@@ -222,32 +222,53 @@ public class OrderServiceImpl implements IOrderService{
 		return result;
 	}
 
+	/**HERE**
+	 * 관리자가 전체 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersList(Pager pager) {
 		List<OrdersDTO> orders = ordersDAO.selectAllByPage(pager);
 		return orders;
 	}
 
+	/**
+	 * 관리자가 주문번호로 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersListByOrderId(Pager pager, Long order_id) {
 		List<OrdersDTO> orders = ordersDAO.selectByPageAndOrderId(pager, order_id);
 		return orders;
 	}
 
+	/**
+	 * 관리자가 배송상태로 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersListByDelivery(Pager pager, String delivery) {
 		List<OrdersDTO> orders = ordersDAO.selectByPageAndDelivery(pager, delivery);
 		return orders;
 	}
 
+	/**
+	 * 주문번호로 상세 주문 조회를 위한 서비스
+	 * @param Long order_id
+	 * @return Map<Sgring, Object> (ordersDTO, membersDTO, List<MyPageDTO>, totalPrice)
+	 */
 	@Override
 	public Map<String, Object> getOrderInfo(Long order_id) {
 		OrdersDTO order = ordersDAO.selectByOrderId(order_id);
 		MembersDTO member = membersDAO.selectByMemberId(order.getMember_id());
 		List<OrderlistsDTO> orderLists = orderlistsDAO.selectByOrderId(order_id);
 		List<MyPageDTO> orderInfoList = new ArrayList<>();
-		//List<ProductsDTO> productLists = new ArrayList<>();
 		
+		//한 테이블안에서 정보를 보여주기 위해
+		//orderlist(상품id, 상품수량, 상품색상, 상품사이즈)와 product(상품id, 상품이름, 상품가격)를 합친 List<MypageDTO> 사용
 		for(OrderlistsDTO orderlist : orderLists) {
 			ProductsDTO products = productsDAO.selectByProductId(orderlist.getProduct_id());
 			MyPageDTO orderInfo = new MyPageDTO();
@@ -256,6 +277,7 @@ public class OrderServiceImpl implements IOrderService{
 			orderInfoList.add(orderInfo);
 		}
 		
+		//주문한 상품들의 상품가격*수량의 총합을 구하기 위함
 		long totalPrice = 0;
 		for(MyPageDTO list : orderInfoList) {
 			long tempPrice = (long) list.getProduct_quantity() * (long) list.getProduct_price();
@@ -267,12 +289,15 @@ public class OrderServiceImpl implements IOrderService{
 		map.put("member", member);
 		map.put("orderInfoList", orderInfoList);
 		map.put("totalPrice", totalPrice);
-		//map.put("orderLists", orderLists);
-		//map.put("productsList", productLists);
 		
 		return map;
 	}
 
+	/**
+	 * 주문 정보 수정을 위한 서비스
+	 * @param OrdersDTO orderInfo
+	 * @return OrdersDTO
+	 */
 	@Override
 	public OrdersDTO modifyOrder(OrdersDTO orderInfo) {
 		OrdersDTO order = new OrdersDTO();
@@ -285,11 +310,19 @@ public class OrderServiceImpl implements IOrderService{
 		return order;
 	}
 
+	/**
+	 * 전체 주문의 갯수를 얻기 위한 서비스
+	 * @return
+	 */
 	@Override
 	public int getTotalOrdersCount() {
 		return ordersDAO.count();
 	}
 
+	/**
+	 * 배송상태로 검색시 주문의 갯수를 얻기 위한 서비스
+	 * @return
+	 */
 	@Override
 	public int getByDeliveryOrdersCount(String order_delivery_status) {
 		return ordersDAO.countByDelivery(order_delivery_status);

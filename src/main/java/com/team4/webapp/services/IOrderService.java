@@ -3,14 +3,18 @@ package com.team4.webapp.services;
 import java.util.List;
 import java.util.Map;
 
+import com.team4.webapp.dao.OrdersDAO;
 import com.team4.webapp.dto.CartListDTO;
 import com.team4.webapp.dto.CartsDTO;
 import com.team4.webapp.dto.CheckoutDTO;
 import com.team4.webapp.dto.CheckoutListDTO;
 import com.team4.webapp.dto.MembersDTO;
+import com.team4.webapp.dto.MyPageDTO;
+import com.team4.webapp.dto.OrderlistsDTO;
 import com.team4.webapp.dto.OrdersDTO;
 import com.team4.webapp.dto.Pager;
 import com.team4.webapp.dto.PreOrdersDTO;
+import com.team4.webapp.dto.ProductsDTO;
 public interface IOrderService {
 	
 	/**
@@ -66,7 +70,7 @@ public interface IOrderService {
 	 */
 	boolean removeCarts(Long member_id);
 	
-	/**
+	/**HERE**
 	 * 주문 정보 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
 	 * @param Pager pager
 	 * @return List<OrdersDTO>
@@ -92,7 +96,7 @@ public interface IOrderService {
 	/**
 	 * 상세 주문 조회를 위해 제공하는 인터페이스
 	 * @param Long order_id
-	 * @return Map<String, Object> -> ordersDTO, membersDTO, List<OrderDetailsDTO>
+	 * @return Map<String, Object> -> ordersDTO, membersDTO, List<MyPageDTO>, totalPrice
 	 */
 	Map<String, Object> getOrderInfo(Long order_id);
 	
@@ -103,6 +107,17 @@ public interface IOrderService {
 	 */
 	OrdersDTO modifyOrder(OrdersDTO orderInfo);
 	
+	/**
+	 * 전체 주문의 갯수를 얻기 위해 제공하는 인터페이스
+	 * @return
+	 */
+	int getTotalOrdersCount();
+	
+	/**
+	 * 배송상태로 검색시 주문의 갯수를 얻기 위해 제공하는 인터페이스
+	 * @return
+	 */
+	int getByDeliveryOrdersCount(String order_delivery_status);
 	
 	
 }

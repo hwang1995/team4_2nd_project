@@ -58,17 +58,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.expressionHandler(securityExpressionHandler()) // 권한 계층 설정
 			// 요청 경고 권한 설정
-			.antMatchers(HttpMethod.POST, "/api/account").hasAnyRole("ADMIN", "USER") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
-			.antMatchers(HttpMethod.PUT, "/api/account").hasAnyRole("ADMIN")
-			.antMatchers(HttpMethod.DELETE, "/api/account/*").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.POST, "/api/members").hasAnyRole("ADMIN") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
+			.antMatchers(HttpMethod.PUT, "/api/members").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/members/*").hasAnyRole("ADMIN")
 			
-			.antMatchers(HttpMethod.POST, "/api/order").hasAnyRole("ADMIN", "USER") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
-			.antMatchers(HttpMethod.PUT, "/api/order").hasAnyRole("ADMIN")
-			.antMatchers(HttpMethod.DELETE, "/api/order/*").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.POST, "/api/auth").hasAnyRole("ADMIN") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
+			.antMatchers(HttpMethod.PUT, "/api/auth").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/auth/*").hasAnyRole("ADMIN")
 			
-			.antMatchers(HttpMethod.POST, "/api/product").hasAnyRole("ADMIN") 
-			.antMatchers(HttpMethod.PUT, "/api/product").hasAnyRole("ADMIN")
-			.antMatchers(HttpMethod.DELETE, "/api/product/*").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.POST, "/api/mail").hasAnyRole("ADMIN") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
+			.antMatchers(HttpMethod.PUT, "/api/mail").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/mail/*").hasAnyRole("ADMIN")
+			
+			.antMatchers(HttpMethod.POST, "/api/qna").hasAnyRole("ADMIN") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
+			.antMatchers(HttpMethod.PUT, "/api/qna").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/qna/*").hasAnyRole("ADMIN")
+			
+			.antMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("ADMIN") // @RolesAllowed("ROLE_ADMIN")으로 세부 권한 설정 가능
+			.antMatchers(HttpMethod.PUT, "/api/orders").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/orders/*").hasAnyRole("ADMIN")
+			
+			.antMatchers(HttpMethod.POST, "/api/products").hasAnyRole("ADMIN") 
+			.antMatchers(HttpMethod.PUT, "/api/products").hasAnyRole("ADMIN")
+			.antMatchers(HttpMethod.DELETE, "/api/products/*").hasAnyRole("ADMIN")
 
 			// 그 이외의 모든 경로 허가
 			.antMatchers("/**").permitAll();

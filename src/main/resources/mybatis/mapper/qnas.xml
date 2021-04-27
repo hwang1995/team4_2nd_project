@@ -37,10 +37,26 @@
 		select count(*) from qnas
 	</select>
 	
+	<select id="countByMemberId" resultType="int">
+		select count(*) from qnas where member_id=#{member_id}
+	</select>
+	
+	<select id="countByCategory" resultType="int">
+		select count(*) from qnas where qna_category=#{qna_category}
+	</select>
+	
+	<select id="countByAnswer" resultType="int">
+		select count(*) from qnas where qna_answer=#{qna_answer}
+	</select>
+	
+	<select id="countByFinishedAnswer" resultType="int">
+		select count(*) from qnas where qna_answer!=#{qna_answer}
+	</select>
+	
 	<select id="selectByPage" parameterType="pager" resultType="qnas">
 		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		from (
-		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    select rownum as rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		    from (
 		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		        from qnas
@@ -54,47 +70,61 @@
 	<select id="selectByPageAndId" resultType="qnas">
 		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		from (
-		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    select rownum as rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		    from (
 		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		        from qnas
 		        where member_id  = #{member_id}
 		        order by qna_id desc
 		    )
-		    where rownum &lt;= #{endRowNo}
+		    where rownum &lt;= #{pager.endRowNo}
 		)
-		where rnum &gt;= #{startRowNo}
+		where rnum &gt;= #{pager.startRowNo}
 	</select>
 
 	<select id="selectByPageAndCategory" resultType="qnas">
 		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		from (
-		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    select rownum as rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		    from (
 		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		        from qnas
 		        where qna_category  = #{qna_category}
 		        order by qna_id desc
 		    )
-		    where rownum &lt;= #{endRowNo}
+		    where rownum &lt;= #{pager.endRowNo}
 		)
-		where rnum &gt;= #{startRowNo}
+		where rnum &gt;= #{pager.startRowNo}
 	</select>
 	
 	<select id="selectByPageAndAnswer" resultType="qnas">
 		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		from (
-		    select rownum as rnum, oqna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    select rownum as rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		    from (
 		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
 		        from qnas
 		        where qna_answer  = #{qna_answer}
 		        order by qna_id desc
 		    )
-		    where rownum &lt;= #{endRowNo}
+		    where rownum &lt;= #{pager.endRowNo}
 		)
-		where rnum &gt;= #{startRowNo}
+		where rnum &gt;= #{pager.startRowNo}
 	</select>
 	
+	<select id="selectByPageAndFinishedAnswer" resultType="qnas">
+		select rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		from (
+		    select rownum as rnum, qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		    from (
+		        select qna_id, qna_category, qna_title, qna_content, qna_answer, member_id
+		        from qnas
+		        where qna_answer  != #{qna_answer}
+		        order by qna_id desc
+		    )
+		    where rownum &lt;= #{pager.endRowNo}
+		)
+		where rnum &gt;= #{pager.startRowNo}
+	</select>
 	
 </mapper>

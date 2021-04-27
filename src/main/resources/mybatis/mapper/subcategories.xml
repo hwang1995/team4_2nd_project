@@ -12,7 +12,7 @@
 	<select id="selectBySubCategoryId"
 			parameterType="long"
 			resultType="subcategories">
-		select *
+		select subcategory_id, subcategory_name, category_id
 		from subcategories
 		where
 		subcategory_id = #{subcategory_id}
@@ -51,5 +51,13 @@
 		subcategory_name = #{subcategory_name}
 	</select>
 
+	<select id="selectByCategoryId"
+			parameterType="long"
+			resultType="subcategories">
+		select subcategory_id, subcategory_name, category_id
+		from subcategories
+		where
+		category_id = #{category_id}
+	</select>
 
 </mapper>

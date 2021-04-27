@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 		
 		// authToken이라는 헤더로 Request가 날라온 경우
 		String jwtToken = httpRequest.getHeader("authToken");
-		logger.info(jwtToken);
+
 		
 		if(jwtToken == null) {
 			// JWT가 요청 파라미터로 전달된 경우 받아야 한다.
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 			if(JwtUtil.validateToken(jwtToken)) {
 				// JWT에서 EMAIL 얻기
 				String email = JwtUtil.getEmail(jwtToken);
-				logger.info("USER EMAIL IS " + email);
+
 				
 				// DB에서 EMAIL에 해당하는 정보를 가져오기(이름, 비밀번호, 권한들)
 				UserDetails userDetails = userDetailsService.loadUserByUsername(email);

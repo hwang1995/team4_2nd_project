@@ -82,4 +82,24 @@ public interface IAccountService {
 	 * @return boolean
 	 */
 	boolean deleteAccount(Long member_id);
+	
+	/**
+	 * 페이징에 필요한 회원 전체 행의 count를 구하기 위해 제공하는 인터페이스
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	int getTotalMemberRows();
+	
+	/**
+	 * 페이징에서 이메일로 검색한 회원 행의 count를 구하기 위해 제공하는 인터페이스
+	 * @param String email
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	int getMemberRowsByEmail(String email);
+	
+	/**
+	 * 페이징에 이름으로 검색한 회원 행의 count를 구하기 위해 제공하는 인터페이스
+	 * @param String name
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	int getMemberRowsByName(String name);
 }

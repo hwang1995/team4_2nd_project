@@ -94,6 +94,7 @@ public class AuthServiceImpl implements IAuthService {
 	/**
 	 * 서비스 목적
 	 * - 회원이 회원가입시에 이메일이 중복되는지 체크하기 위한 서비스
+	 * - 관리자가 회원가입시에 이메일이 중복되는지 체크하기 위한 서비스
 	 * - 컨트롤러에 true or false를 전달한다. 
 	 * @return boolean (true or false)
 	 */
@@ -121,6 +122,26 @@ public class AuthServiceImpl implements IAuthService {
 	}
 	
 	/**
+	 * 관리자가 회원가입을 하기 위한 서비스
+	 * @param MembersDTO member
+	 * @return int (영향을 받은 행의 수를 얻기 위하여)
+	 */
+	@Override
+	public int registAdminMember(MembersDTO member) {
+		// 1. MembersDAO의 insertMembers(member)를 전달한다.
+		// 2. 영향받은 행의 수를 전달한다.
+		logger.info("멤버 : " + member.toString());
+		//member객체에 관리자 설정에 필요한 정보들을 setting
+		String encodedPassword = pwEncoder(member.getMember_pw());
+		member.setMember_authority("ROLE_ADMIN");
+		member.setMember_enabled(true);
+		member.setMember_pw(encodedPassword);
+		logger.info(member.toString());
+		int row = membersDAO.insertMembers(member);
+		return row;
+	}
+	
+	/**
 	 * 비밀번호를 암호화 하기 위해 사용하는 메서드
 	 * @param String password (plainText)
 	 * @return String (saltedText)
@@ -130,5 +151,6 @@ public class AuthServiceImpl implements IAuthService {
 		String encodedPassword = passwordEncoder.encode(password);
 		return encodedPassword;
 	}
+	
 
 }

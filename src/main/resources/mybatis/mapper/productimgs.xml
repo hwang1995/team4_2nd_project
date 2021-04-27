@@ -15,7 +15,7 @@
 	
 	<insert id="insertProductImg" parameterType="productImgs">
 		<selectKey keyProperty="product_img_id" resultType="long" order="BEFORE">
-			select seq_product_imgs_id.nextval from dual
+			select SEQ_PRODUCTIMG_ID.nextval from dual
 		</selectKey>
 		insert into product_imgs
 		(product_img_id, product_img_type, product_img_category, product_img_name, product_id)

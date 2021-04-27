@@ -21,4 +21,9 @@ public interface QnasDAO {
 	public List<QnasDTO> selectByPageAndId(@Param("pager") Pager pager, @Param("member_id") Long member_id);
 	public List<QnasDTO> selectByPageAndCategory(@Param("pager") Pager pager, @Param("qna_category") String qna_category);
 	public List<QnasDTO> selectByPageAndAnswer(@Param("pager") Pager pager, @Param("qna_answer") String qna_answer);
+	public List<QnasDTO> selectByPageAndFinishedAnswer(@Param("pager") Pager pager, @Param("qna_answer") String qna_answer);
+	public int countByMemberId(Long member_id);
+	public int countByCategory(String qna_category);
+	public int countByAnswer(String qna_answer);
+	public int countByFinishedAnswer(String qna_answer);
 }

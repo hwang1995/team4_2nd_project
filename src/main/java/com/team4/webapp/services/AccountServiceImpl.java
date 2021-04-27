@@ -160,28 +160,99 @@ public class AccountServiceImpl implements IAccountService {
 		return rows;
 	}
 	
+	/**
+	 * 관리자가 페이저로 전체 회원 리스트를 받기 위해 제공하는 서비스
+	 * @param Pager pager
+	 * @return List<MembersDTO>
+	 */
 	@Override
 	public List<MembersDTO> getAccountsList(Pager pager) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPage(pager);
+		return list;
 	}
 	
+	/**
+	 * 관리자가 이메일 주소 + 페이저로 회원 리스트를 받기 위해 제공하는 서비스
+	 * @param Pager pager
+	 * @param String email
+	 * @return List<MembersDTO>
+	 */
 	@Override
 	public List<MembersDTO> getAccountsListByEmail(Pager pager, String email) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPageAndEmail(pager,email);
+		return list;
 	}
 	
+	/**
+	 * 관리자가 이름 + 페이저로 회원 리스트를 받기 위해 제공하는 서비스
+	 * @param pager
+	 * @param name
+	 * @return List<MembersDTO>
+	 */
 	@Override
 	public List<MembersDTO> getAccountsListByName(Pager pager, String name) {
-		return null;
+		List<MembersDTO>list = membersDAO.selectByPageAndName(pager,name);
+		return list;
 	}
+	
+	/**
+	 * 회원 정보를 수정하기 위해 제공하는 서비스
+	 * @param MembersDTO memberInfo
+	 * @return boolean
+	 */
 	@Override
 	public boolean modifyAccount(MembersDTO memberInfo) {
-		return false;
+		int row = membersDAO.updateMembersByAdmin(memberInfo);
+		if(row != 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
+	/**
+	 * 회원을 삭제하기 위해 제공하는 서비스
+	 * @param Long member_id
+	 * @return boolean
+	 */
 	@Override
 	public boolean deleteAccount(Long member_id) {
-		return false;
+		int row = membersDAO.deleteByMemberId(member_id);
+		if(row != 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
+	/**
+	 * 페이징에 필요한 회원 전체 행의 count를 구하기 위해 제공하는 서비스
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	@Override
+	public int getTotalMemberRows() {
+		int totalRow = membersDAO.count();
+		return totalRow;
+	}
 	
+	/**
+	 * 페이징에서 이메일로 검색한 회원 행의 count를 구하기 위해 제공하는 서비스
+	 * @param String email
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	@Override
+	public int getMemberRowsByEmail(String email) {
+		int countByEmail = membersDAO.getCountByEmail(email);
+		return countByEmail;
+	}
+	
+	/**
+	 * 페이징에 이름으로 검색한 회원 행의 count를 구하기 위해 제공하는 서비스
+	 * @param String name
+	 * @return int (카운트 값을 얻기 위해)
+	 */
+	@Override
+	public int getMemberRowsByName(String name) {
+		int countByName = membersDAO.getCountByName(name);
+		return countByName;
+	}
 }

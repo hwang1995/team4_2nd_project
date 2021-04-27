@@ -1,6 +1,7 @@
 package com.team4.webapp.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.team4.webapp.dao.CartsDAO;
+import com.team4.webapp.dao.MembersDAO;
 import com.team4.webapp.dao.OrderlistsDAO;
 import com.team4.webapp.dao.OrdersDAO;
 import com.team4.webapp.dao.ProductsDAO;
@@ -18,6 +20,8 @@ import com.team4.webapp.dto.CartsDTO;
 import com.team4.webapp.dto.CheckoutDTO;
 import com.team4.webapp.dto.CheckoutListDTO;
 import com.team4.webapp.dto.MembersDTO;
+import com.team4.webapp.dto.MyPageDTO;
+import com.team4.webapp.dto.OrderDetailsDTO;
 import com.team4.webapp.dto.OrderlistsDTO;
 import com.team4.webapp.dto.OrdersDTO;
 import com.team4.webapp.dto.Pager;
@@ -40,6 +44,9 @@ public class OrderServiceImpl implements IOrderService{
 	
 	@Autowired
 	private CartsDAO cartsDAO;
+	
+	@Autowired
+	private MembersDAO membersDAO;
 	
 	/**
 	 * 장바구니의 목록을 가져오기 위한 서비스
@@ -215,34 +222,110 @@ public class OrderServiceImpl implements IOrderService{
 		return result;
 	}
 
+	/**HERE**
+	 * 관리자가 전체 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersList(Pager pager) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectAllByPage(pager);
+		return orders;
 	}
 
+	/**
+	 * 관리자가 주문번호로 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersListByOrderId(Pager pager, Long order_id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectByPageAndOrderId(pager, order_id);
+		return orders;
 	}
 
+	/**
+	 * 관리자가 배송상태로 검색시 주문정보+페이저로 리스트를 받기 위한 서비스
+	 * @param Pager pager
+	 * @return List<OrdersDTO> (order - orderid, 날짜, 은행, 배송비, 결제상태, 배송상태, 수취인, 주소, 전화, memeberid)
+	 */
 	@Override
 	public List<OrdersDTO> getOrdersListByDelivery(Pager pager, String delivery) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrdersDTO> orders = ordersDAO.selectByPageAndDelivery(pager, delivery);
+		return orders;
 	}
 
+	/**
+	 * 주문번호로 상세 주문 조회를 위한 서비스
+	 * @param Long order_id
+	 * @return Map<Sgring, Object> (ordersDTO, membersDTO, List<MyPageDTO>, totalPrice)
+	 */
 	@Override
 	public Map<String, Object> getOrderInfo(Long order_id) {
-		// TODO Auto-generated method stub
-		return null;
+		OrdersDTO order = ordersDAO.selectByOrderId(order_id);
+		MembersDTO member = membersDAO.selectByMemberId(order.getMember_id());
+		List<OrderlistsDTO> orderLists = orderlistsDAO.selectByOrderId(order_id);
+		List<MyPageDTO> orderInfoList = new ArrayList<>();
+		
+		//한 테이블안에서 정보를 보여주기 위해
+		//orderlist(상품id, 상품수량, 상품색상, 상품사이즈)와 product(상품id, 상품이름, 상품가격)를 합친 List<MypageDTO> 사용
+		for(OrderlistsDTO orderlist : orderLists) {
+			ProductsDTO products = productsDAO.selectByProductId(orderlist.getProduct_id());
+			MyPageDTO orderInfo = new MyPageDTO();
+			orderInfo.setOrderInfo(orderlist);
+			orderInfo.setProductsInfo(products);
+			orderInfoList.add(orderInfo);
+		}
+		
+		//주문한 상품들의 상품가격*수량의 총합을 구하기 위함
+		long totalPrice = 0;
+		for(MyPageDTO list : orderInfoList) {
+			long tempPrice = (long) list.getProduct_quantity() * (long) list.getProduct_price();
+			totalPrice += tempPrice;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("order", order);
+		map.put("member", member);
+		map.put("orderInfoList", orderInfoList);
+		map.put("totalPrice", totalPrice);
+		
+		return map;
 	}
 
+	/**
+	 * 주문 정보 수정을 위한 서비스
+	 * @param OrdersDTO orderInfo
+	 * @return OrdersDTO
+	 */
 	@Override
 	public OrdersDTO modifyOrder(OrdersDTO orderInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		OrdersDTO order = new OrdersDTO();
+		int row = ordersDAO.updateOrders(orderInfo);
+		if(row == 1) {
+			order = ordersDAO.selectByOrderId(orderInfo.getOrder_id());
+		} else {
+			logger.info("수정실패");
+		}
+		return order;
+	}
+
+	/**
+	 * 전체 주문의 갯수를 얻기 위한 서비스
+	 * @return
+	 */
+	@Override
+	public int getTotalOrdersCount() {
+		return ordersDAO.count();
+	}
+
+	/**
+	 * 배송상태로 검색시 주문의 갯수를 얻기 위한 서비스
+	 * @return
+	 */
+	@Override
+	public int getByDeliveryOrdersCount(String order_delivery_status) {
+		return ordersDAO.countByDelivery(order_delivery_status);
 	}
 	
 	

@@ -4,8 +4,10 @@ package com.team4.webapp.services;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.team4.webapp.dto.Pager;
+import com.team4.webapp.dto.QnaMembersDTO;
 import com.team4.webapp.dto.QnasDTO;
 
 public interface IQnaService {
@@ -20,33 +22,48 @@ public interface IQnaService {
 	/**
 	 * Q&A 목록 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
 	 * @param Pager pager
-	 * @return List<QnasDTO>
+	 * @return List<QnaMembersDTO>
 	 */
-	List<QnasDTO> getQnasList(Pager pager);
+	List<QnaMembersDTO> getQnasList(Pager pager);
 	
 	/**
 	 * Q&A 목록 + 회원 ID + 페이저로 리스트를 받기 위해 제공하는 인터페이스
 	 * @param Pager pager
 	 * @param String email
-	 * @return List<QnasDTO>
+	 * @return List<QnaMembersDTO>
 	 */
-	List<QnasDTO> getQnasListById(Pager pager, Long member_id);
+	List<QnaMembersDTO> getQnasListById(Pager pager, String member_email);
 	
 	/**
 	 * Q&A 목록 + 카테고리 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
 	 * @param Pager pager
 	 * @param String category
-	 * @return List<QnasDTO>
+	 * @return List<QnaMembersDTO>
 	 */
-	List<QnasDTO> getQnasListByCategory(Pager pager, String category);
+	List<QnaMembersDTO> getQnasListByCategory(Pager pager, String category);
 	
 	/**
-	 * Q&A 목록 + 답변 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
+	 * Q&A 목록 + 답변안된것 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
 	 * @param Pager pager
 	 * @param String answer
-	 * @return List<QnasDTO>
+	 * @return List<QnaMembersDTO>
 	 */
-	List<QnasDTO> getQnasListByAnswer(Pager pager, String answer);
+	List<QnaMembersDTO> getQnasListByAnswer(Pager pager, String answer);
+	
+	/**
+	 * Q&A 목록 + 답변된것 + 페이저로 리스트를 받기 위해 제공하는 인터페이스
+	 * @param Pager pager
+	 * @param String answer
+	 * @return List<QnaMembersDTO>
+	 */
+	List<QnaMembersDTO> getQnasListByFinishedAnswer(Pager pager, String answer);
+	
+	/**
+	 * qna_id로 Q&A 목록을 찾기 위해 제공하는 인터페이스
+	 * @param Long qna_id
+	 * @return QnaMembersDTO
+	 */
+	QnaMembersDTO getQnaById(Long qna_id);
 	
 	/**
 	 * Q&A를 수정하기 위해 제공하는 인터페이스
@@ -60,5 +77,12 @@ public interface IQnaService {
 	 * @param QnasDTO qnaInfo
 	 * @return boolean
 	 */
-	boolean deleteQna(QnasDTO qnaInfo);
+	boolean deleteQna(Long qna_id);
+	
+	//Pager를 위한 Count를 세주기 위해 제공하는 인터페이스들
+	int getCount();
+	int getCountByEmail(String member_email);
+	int getCountByCategory(String qna_category);
+	int getCountByAnswer(String qna_answer);
+	int getCountByFinishedAnswer(String qna_answer);
 }

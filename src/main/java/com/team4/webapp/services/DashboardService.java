@@ -90,10 +90,7 @@ public class DashboardService {
 				ds.setOrder_date(orderDate);
 				ds.setSum_price(total);
 				dateSums.add(ds);
-<<<<<<< HEAD
 
-=======
->>>>>>> refs/remotes/origin/features_dashboard
 				orderDate = dateSum.getOrder_date();
 				total = dateSum.getSum_price();
 			}

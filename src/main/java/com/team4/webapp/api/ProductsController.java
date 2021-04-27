@@ -88,6 +88,7 @@ public class ProductsController {
 	@GetMapping("/categories")
 	public Map<String, Object> getCategories() {
 		Map<String, Object> categoryList = productService.getAllCategories();
+		
 		return categoryList;
 	}
 
@@ -98,7 +99,6 @@ public class ProductsController {
 	 */
 	@PostMapping("/upload")
 	public ImageSaveDTO uploadImage(@RequestBody ImageSaveDTO data) {
-
 		ImageSaveDTO returnData = productService.uploadImage(data);
 
 		return returnData;
@@ -113,8 +113,11 @@ public class ProductsController {
 	@PostMapping("/upload/main")
 	public Map<String, String> uploadMainImage(@RequestParam MultipartFile uploadFile) {
 		Map<String, String> map = new HashMap<String, String>();
+		
 		String result = productService.uploadMainImage(uploadFile);
+		
 		map.put("product_image", result);
+		
 		return map;
 	}
 	
@@ -125,7 +128,9 @@ public class ProductsController {
 	@GetMapping("/sequence")
 	public Map<String, Long> getSequence() {
 		Map<String, Long> map = new HashMap<String, Long>();
+		
 		map.put("product_id", productService.getSequence());
+		
 		return map;
 	}
 	

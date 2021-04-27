@@ -21,6 +21,7 @@ public class MailService {
 	
 	public void mailSend(MailDTO mailDTO) {
 		SimpleMailMessage message = new SimpleMailMessage();
+		
 		message.setTo(mailDTO.getAddress());
 		message.setFrom(MailService.FROM_ADDRESS);
 		message.setSubject(mailDTO.getTitle());

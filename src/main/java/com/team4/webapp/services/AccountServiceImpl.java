@@ -28,10 +28,13 @@ public class AccountServiceImpl implements IAccountService {
 	
 	@Autowired
 	private OrdersDAO ordersDAO;
+	
 	@Autowired
 	private OrderlistsDAO orderlistsDAO;
+	
 	@Autowired
 	private ProductsDAO productsDAO;
+	
 	@Autowired
 	private MembersDAO membersDAO;
 
@@ -167,7 +170,7 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public List<MembersDTO> getAccountsList(Pager pager) {
-		List<MembersDTO>list = membersDAO.selectByPage(pager);
+		List<MembersDTO> list = membersDAO.selectByPage(pager);
 		return list;
 	}
 	
@@ -179,7 +182,7 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public List<MembersDTO> getAccountsListByEmail(Pager pager, String email) {
-		List<MembersDTO>list = membersDAO.selectByPageAndEmail(pager,email);
+		List<MembersDTO> list = membersDAO.selectByPageAndEmail(pager, email);
 		return list;
 	}
 	
@@ -191,7 +194,7 @@ public class AccountServiceImpl implements IAccountService {
 	 */
 	@Override
 	public List<MembersDTO> getAccountsListByName(Pager pager, String name) {
-		List<MembersDTO>list = membersDAO.selectByPageAndName(pager,name);
+		List<MembersDTO> list = membersDAO.selectByPageAndName(pager, name);
 		return list;
 	}
 	
@@ -203,9 +206,10 @@ public class AccountServiceImpl implements IAccountService {
 	@Override
 	public boolean modifyAccount(MembersDTO memberInfo) {
 		int row = membersDAO.updateMembersByAdmin(memberInfo);
+		
 		if(row != 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -217,9 +221,10 @@ public class AccountServiceImpl implements IAccountService {
 	@Override
 	public boolean deleteAccount(Long member_id) {
 		int row = membersDAO.deleteByMemberId(member_id);
+		
 		if(row != 0) {
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}

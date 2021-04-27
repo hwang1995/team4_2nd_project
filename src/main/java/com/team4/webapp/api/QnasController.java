@@ -33,31 +33,33 @@ public class QnasController {
 	@Autowired
 	private QnaServiceImpl qnasService;
 	
+	//Q&A 목록을 보여줌. selectOption 별로 검색을 하여 목록을 보여줌.
 	@GetMapping("")
 	public Map<String, Object> getQnasList(@RequestParam(defaultValue = "1") int pageNo, String member_email, String qna_category, String qna_answer) {
 		int totalRows;
 		Pager pager = null;
 		List<QnaMembersDTO> list = new ArrayList<>();
+		//email이 들어왔다면 email로 리스트를 가져옴
 		if(member_email != null) {
 			totalRows = qnasService.getCountByEmail(member_email);
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasListById(pager, member_email);
-		} else if(qna_category != null) {
+		} else if(qna_category != null) {	//category로 리스트 가져옴
 			totalRows = qnasService.getCountByCategory(qna_category);
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasListByCategory(pager, qna_category);
 		} else if(qna_answer != null) {
-			if(qna_answer.equals("답변중")) {
+			if(qna_answer.equals("답변중")) {		//Q&A 답변이 안된 리스트를 가져옴
 				totalRows = qnasService.getCountByAnswer(qna_answer);
 				pager = new Pager(10, 5, totalRows, pageNo);
 				list = qnasService.getQnasListByAnswer(pager, qna_answer);
-			} else {
+			} else {	//Q&A 답변이 된 리스트를 가져옴
 				qna_answer="답변중";
 				totalRows = qnasService.getCountByFinishedAnswer(qna_answer);
 				pager = new Pager(10, 5, totalRows, pageNo);
 				list = qnasService.getQnasListByFinishedAnswer(pager, qna_answer);
 			}
-		} else {
+		} else {	//모든 Q&A 리스트를 가져옴
 			totalRows = qnasService.getCount();
 			pager = new Pager(10, 5, totalRows, pageNo);
 			list = qnasService.getQnasList(pager);
@@ -68,12 +70,14 @@ public class QnasController {
 		return map;
 	}
 	
+	//qna_id로 해당하는 객체를 가져옴
 	@GetMapping("/{qna_id}")
 	public QnaMembersDTO getQna(@PathVariable Long qna_id) {
 		QnaMembersDTO qna = qnasService.getQnaById(qna_id);
 		return qna;
 	}
 	
+	//Q&A를 update 시켜줌
 	@PutMapping("")
 	public QnasDTO modifyQna(@RequestBody QnasDTO qna, HttpServletResponse response) {
 		boolean result = qnasService.modifyQna(qna);
@@ -85,6 +89,7 @@ public class QnasController {
 		}
 	}
 	
+	//Q&A를 delete 함
 	@DeleteMapping("/{qna_id}")
 	public void deleteQna(@PathVariable Long qna_id, HttpServletResponse response) {
 		boolean result = qnasService.deleteQna(qna_id);

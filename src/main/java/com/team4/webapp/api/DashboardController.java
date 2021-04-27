@@ -51,11 +51,12 @@ public class DashboardController {
 		// 배송 완료를 가져온다.
 		int totalDeliveryFinished = orderService.getByDeliveryOrdersCount("DELIVERY_COMPLETED");
 		
+		// chart 데이터를 가져온다.
 		List<OrderDateSumDTO> chart = dashboardService.getDashboardChart();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("totalMembers", totalMembers);
 		map.put("totalQnaWaiting", totalQnaWaiting);
-		map.put("totalQnaFinsihed", totalQnaFinished);
+		map.put("totalQnaFinished", totalQnaFinished);
 		map.put("totalProducts", totalProducts);
 		map.put("totalDeliveryWaiting", totalDeliveryWaiting);
 		map.put("totalDeliveryFinished", totalDeliveryFinished);
